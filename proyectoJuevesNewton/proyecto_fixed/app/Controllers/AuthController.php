@@ -53,4 +53,25 @@ class AuthController extends Controller {
         Session::destroy();
         redirect('login');
     }
+
+    public function forgotPassword(): void {
+        $email = trim($_POST['email'] ?? '');
+        // En un entorno real se enviaría un correo con un token
+        redirect('login?msg=forgot_sent');
+    }
+
+    public function requestAccount(): void {
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        
+        if (!empty($name) && !empty($email)) {
+            $db = \app\Core\Database::getInstancia();
+            // Asignamos la notificación al usuario ID 1 (Admin Global)
+            $stmt = $db->prepare("INSERT INTO notificaciones (usuario_id, mensaje) VALUES (1, ?)");
+            $mensaje = "Nueva solicitud de cuenta: $name ($email)";
+            $stmt->execute([$mensaje]);
+        }
+        
+        redirect('login?msg=request_sent');
+    }
 }
