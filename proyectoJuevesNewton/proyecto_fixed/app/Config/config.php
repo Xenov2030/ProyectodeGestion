@@ -32,9 +32,28 @@ class Config {
 
     /**
      * Obtiene la URL base de la aplicación.
+     * Si APP_URL no está definida en .env, la detecta automáticamente.
+     * Esto hace el proyecto portable en cualquier PC con WAMP/XAMPP.
      */
     public static function baseUrl($path = '') {
-        $baseUrl = self::get('APP_URL', 'http://localhost');
-        return rtrim($baseUrl, '/') . '/' . ltrim($path, '/');
+        $envUrl = self::get('APP_URL', '');
+
+        if (!empty($envUrl)) {
+            // Usar la URL del .env si está configurada
+            $baseUrl = rtrim($envUrl, '/');
+        } else {
+            // Auto-detección: funciona con cualquier ruta en WAMP/XAMPP
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+            // SCRIPT_NAME sería algo como /proyectos/proyectoJuevesNewton/public/index.php
+            $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+            // Quitamos /public/index.php (o /public) para obtener la raíz del proyecto
+            $basePath = preg_replace('#/public(/index\.php)?$#', '', $scriptName);
+
+            $baseUrl = $protocol . '://' . $host . $basePath;
+        }
+
+        return $baseUrl . '/' . ltrim($path, '/');
     }
 }
