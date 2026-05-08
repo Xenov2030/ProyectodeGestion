@@ -2,6 +2,16 @@
 // views/layouts/app.php
 use app\Core\Session;
 use app\Core\I18n;
+
+// Detectar la ruta actual de forma segura (sin que afecte el nombre de la carpeta en WAMP)
+$currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$basePath = parse_url(url('/'), PHP_URL_PATH);
+$route = trim(str_replace($basePath ?? '', '', $currentPath), '/');
+
+$isDashboard = ($route === '' || $route === 'dashboard');
+$isProyectos = (strpos($route, 'proyectos') === 0);
+$isTickets   = (strpos($route, 'tickets') === 0);
+$isChat      = (strpos($route, 'chat') === 0);
 ?>
 <!DOCTYPE html>
 <html lang="<?= I18n::getLang() ?>">
@@ -32,16 +42,16 @@ use app\Core\I18n;
         </div>
 
         <div class="mt-2">
-            <a href="<?= url('dashboard') ?>" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false ? 'active' : '' ?>">
+            <a href="<?= url('dashboard') ?>" class="nav-link <?= $isDashboard ? 'active' : '' ?>">
                 <i class="bi bi-house-door"></i> <?= I18n::t('dashboard') ?>
             </a>
-            <a href="<?= url('proyectos') ?>" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], 'proyectos') !== false ? 'active' : '' ?>">
+            <a href="<?= url('proyectos') ?>" class="nav-link <?= $isProyectos ? 'active' : '' ?>">
                 <i class="bi bi-layers"></i> <?= I18n::t('projects') ?>
             </a>
-            <a href="<?= url('tickets') ?>" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], 'tickets') !== false ? 'active' : '' ?>">
+            <a href="<?= url('tickets') ?>" class="nav-link <?= $isTickets ? 'active' : '' ?>">
                 <i class="bi bi-shield-check"></i> <?= I18n::t('tickets') ?>
             </a>
-            <a href="<?= url('chat') ?>" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], 'chat') !== false ? 'active' : '' ?>">
+            <a href="<?= url('chat') ?>" class="nav-link <?= $isChat ? 'active' : '' ?>">
                 <i class="bi bi-chat-left-dots"></i> <?= I18n::t('chat') ?>
             </a>
         </div>
