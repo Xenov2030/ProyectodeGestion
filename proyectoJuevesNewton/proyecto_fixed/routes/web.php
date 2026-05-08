@@ -9,10 +9,14 @@ use app\Controllers\UserController;
 use app\Controllers\ProjectController;
 use app\Controllers\TicketController;
 use app\Controllers\ChatController;
+use app\Controllers\LanguageController;
 
 // ─── Dashboard ────────────────────────────────────────────────
 $router->get('/',          [DashboardController::class, 'index']);
 $router->get('dashboard',  [DashboardController::class, 'index']);
+
+// ─── Idioma ───────────────────────────────────────────────────
+$router->get('lang',       [LanguageController::class, 'switch']);
 
 // ─── Autenticacion ────────────────────────────────────────────
 $router->get('login',      [AuthController::class, 'showLogin']);
