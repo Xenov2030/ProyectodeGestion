@@ -1,14 +1,16 @@
 <?php
 // views/layouts/auth.php
+use app\Core\I18n;
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= I18n::getLang() ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor Pro | Authentication</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
@@ -31,6 +33,7 @@
             border-radius: 24px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
             border: 1px solid #e2e8f0;
+            position: relative;
         }
         .form-control {
             border-radius: 12px;
@@ -63,5 +66,8 @@
     <div class="auth-card">
         <?= $content ?>
     </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
