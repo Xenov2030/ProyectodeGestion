@@ -1,0 +1,29 @@
+# ==============================================================
+# .gitignore - Gestor Pro SaaS
+# ==============================================================
+
+# ── Archivos de entorno (¡NUNCA subir al repo!) ──────────────
+.env
+
+# ── Dependencias y caché ─────────────────────────────────────
+/vendor/
+/node_modules/
+
+# ── Uploads del sistema (archivos subidos por usuarios) ──────
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# ── Archivos de sistema operativo ────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editores de código ────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Logs de PHP/Apache ────────────────────────────────────────
+*.log
+/logs/

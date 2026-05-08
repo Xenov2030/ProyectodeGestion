@@ -1,60 +1,103 @@
-# 🛠️ Guía de Instalación y Configuración
+# 🛠️ Guía de Instalación — Gestor Pro SaaS
 
-Sigue estos pasos detallados para configurar el entorno de desarrollo local en tu computadora.
-
-## 1. Requisitos Previos
-*   **WampServer** (Recomendado) o XAMPP.
-*   **PHP 8.1** o superior.
-*   **MySQL 8.0** o superior.
-*   **Navegador Web** (Chrome, Edge o Firefox).
+Sigue estos pasos para tener el proyecto funcionando en tu PC con WAMP.
 
 ---
 
-## 2. Configuración de la Carpeta
-Asegúrate de colocar el proyecto en la carpeta correcta de tu servidor local:
-*   En WAMP: `C:\wamp64\www\proyectos\proyectoJuevesNewton\`
-*   En XAMPP: `C:\xampp\htdocs\proyectos\proyectoJuevesNewton\`
+## ✅ Requisitos
+
+| Herramienta | Versión mínima |
+|-------------|----------------|
+| WampServer  | 3.x            |
+| PHP         | 8.1+           |
+| MySQL       | 8.0+           |
+| Navegador   | Chrome / Edge / Firefox |
 
 ---
 
-## 3. Configuración de la Base de Datos
-1.  Abre tu navegador y ve a `http://localhost/phpmyadmin/`.
-2.  Crea una nueva base de datos llamada `proyecto_final` (o el nombre que prefieras).
-3.  Selecciona la base de datos creada.
-4.  Haz clic en la pestaña **"Importar"**.
-5.  Selecciona el archivo: `database/final_schema.sql` que está dentro de la carpeta del proyecto.
-6.  Haz clic en **"Continuar"** o **"Importar"**.
+## 📂 Paso 1 — Clonar / Descargar el Repositorio
 
----
+Coloca la carpeta del proyecto **dentro de `wamp64\www`**.  
+Puedes elegir cualquier ruta, por ejemplo:
 
-## 4. Configuración del Entorno (.env)
-En la raíz del proyecto verás un archivo llamado `.env`. Este archivo le dice al sistema cómo conectarse a la base de datos. Ábrelo con un editor de texto (Notepad++, VS Code) y verifica lo siguiente:
-
-```env
-APP_NAME="Gestor Pro SaaS"
-APP_ENV=local
-APP_URL=http://localhost/proyectos/proyectoJuevesNewton
-
-DB_HOST=localhost
-DB_NAME=proyecto_final   # <--- Debe coincidir con el nombre en phpMyAdmin
-DB_USER=root            # Por defecto en WAMP/XAMPP es root
-DB_PASS=                # Deja vacío si no tienes contraseña en MySQL
+```
+C:\wamp64\www\proyectos\proyectoJuevesNewton\proyecto_fixed\
 ```
 
+> **Nota:** El nombre de la carpeta puede ser cualquiera, el sistema se adapta automáticamente.
+
 ---
 
-## 5. Ejecución
-1.  Asegúrate de que WAMP/XAMPP esté encendido (icono en verde).
-2.  Abre tu navegador y escribe: `http://localhost/proyectos/proyectoJuevesNewton/`
-3.  Si todo es correcto, verás la pantalla de **Login**.
+## 🗄️ Paso 2 — Importar la Base de Datos
 
-### Credenciales de Prueba:
-*   **Email**: `admin@gestorpro.com`
-*   **Contraseña**: `password`
+1. Asegúrate de tener **WAMP encendido** (icono verde en la bandeja del sistema).
+2. Abre tu navegador y ve a: `http://localhost/phpmyadmin`
+3. En la pantalla de inicio de phpMyAdmin (sin seleccionar ninguna BD), haz clic en la pestaña **"Importar"**.
+4. Haz clic en **"Seleccionar archivo"** y elige:
+   ```
+   [tu-carpeta-del-proyecto]\database\final_schema.sql
+   ```
+5. Desplázate al final y haz clic en **"Continuar"** o **"Importar"**.
+
+> ✅ El script creará automáticamente la base de datos `gestor_pro` con todas las tablas y datos de prueba.
+
+---
+
+## ⚙️ Paso 3 — Configurar el Archivo `.env`
+
+1. En la raíz del proyecto encontrarás un archivo llamado **`.env.example`**.
+2. **Cópialo** y renombra la copia como **`.env`** (sin la extensión `.example`).
+3. Abre el `.env` con un editor de texto (VS Code, Notepad++, etc.) y verifica:
+
+```env
+DB_HOST=localhost
+DB_NAME=gestor_pro
+DB_USER=root
+DB_PASS=           ← Dejar vacío si no tienes contraseña en MySQL (WAMP por defecto)
+DB_PORT=3306
+
+APP_URL=http://localhost/proyectos/proyectoJuevesNewton/proyecto_fixed
+```
+
+> **Importante:** Ajusta `APP_URL` con la ruta exacta donde colocaste el proyecto.  
+> Si la pusiste en `C:\wamp64\www\miproyecto\`, la URL sería `http://localhost/miproyecto`.
+
+---
+
+## 🚀 Paso 4 — Ejecutar el Proyecto
+
+1. Abre tu navegador y escribe la URL del proyecto, por ejemplo:
+   ```
+   http://localhost/proyectos/proyectoJuevesNewton/proyecto_fixed/
+   ```
+2. Si todo está bien configurado, verás la **pantalla de Login**.
+
+### 🔑 Credenciales de Prueba
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Administrador Global | `admin@gestorpro.com` | `password` |
+| Director Demo | `director@demo.com` | `password` |
+
+---
+
+## 🔧 Activar `mod_rewrite` en WAMP (si ves Error 404)
+
+El proyecto usa URLs limpias (sin `index.php` en la URL). Para que funcionen:
+
+1. Haz clic izquierdo en el ícono de WAMP en la barra de tareas.
+2. Ve a **Apache → Apache Modules**.
+3. Busca **`rewrite_module`** y haz clic para activarlo (debe aparecer con tilde ✓).
+4. WAMP se reiniciará automáticamente.
 
 ---
 
 ## 💡 Solución de Problemas Comunes
-*   **Error 404**: Verifica que el archivo `.htaccess` esté en la raíz y que el módulo `mod_rewrite` esté activado en Apache.
-*   **Error de Conexión DB**: Revisa que los datos en el `.env` sean idénticos a los de tu phpMyAdmin.
-*   **Página en Blanco**: Asegúrate de tener activada la visualización de errores en PHP o revisa el log de errores de Apache.
+
+| Problema | Causa probable | Solución |
+|----------|---------------|----------|
+| **Error 404** en todas las páginas | `mod_rewrite` desactivado | Ver sección anterior |
+| **"Error de conectividad con la BD"** | Datos incorrectos en `.env` | Verifica `DB_NAME`, `DB_USER`, `DB_PASS` |
+| **Página en blanco** | Error PHP silenciado | Activa errores en `php.ini` o revisa el log de Apache en WAMP |
+| **Login no funciona** | BD no importada | Repite el Paso 2 |
+| **Imágenes/CSS no cargan** | `APP_URL` incorrecta en `.env` | Ajusta la URL al paso 3 |
