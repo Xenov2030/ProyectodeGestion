@@ -31,7 +31,8 @@ class I18n {
             'ticket_responded' => 'Ticket Respondido',
             'click_to_manage' => 'Gestionar proyectos',
             'ago' => 'hace',
-            'yesterday' => 'ayer'
+            'yesterday' => 'ayer',
+            'no_recent_activity' => 'No hay actividad reciente para mostrar'
         ],
         'en' => [
             'dashboard' => 'Dashboard',
@@ -61,7 +62,8 @@ class I18n {
             'ticket_responded' => 'Ticket Responded',
             'click_to_manage' => 'Manage all projects',
             'ago' => 'ago',
-            'yesterday' => 'yesterday'
+            'yesterday' => 'yesterday',
+            'no_recent_activity' => 'No recent activity to show'
         ]
     ];
 

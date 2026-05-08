@@ -9,10 +9,10 @@ use app\Core\I18n;
         <div class="card border-0 p-4 h-100 position-relative overflow-hidden" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
             <div class="position-relative z-1">
                 <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="bg-white bg-opacity-20 rounded-3 p-2">
-                        <i class="bi bi-layers text-white fs-4"></i>
+                    <div class="rounded-3 p-2" style="background-color: rgba(255, 255, 255, 0.2);">
+                        <i class="bi bi-layers text-white fs-4" style="line-height: 1;"></i>
                     </div>
-                    <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-3">Live</span>
+                    <span class="badge rounded-pill px-3" style="background-color: rgba(255, 255, 255, 0.2); color: white;">Live</span>
                 </div>
                 <h6 class="text-white text-opacity-75 small fw-bold mb-1 text-uppercase letter-spacing-1"><?= I18n::t('projects') ?></h6>
                 <h3 class="text-white fw-bold mb-2"><?= I18n::t('active_tasks') ?></h3>
@@ -30,8 +30,8 @@ use app\Core\I18n;
         <div class="card border-0 p-4 h-100 position-relative overflow-hidden" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
             <div class="position-relative z-1">
                 <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="bg-white bg-opacity-20 rounded-3 p-2">
-                        <i class="bi bi-headset text-white fs-4"></i>
+                    <div class="rounded-3 p-2" style="background-color: rgba(255, 255, 255, 0.2);">
+                        <i class="bi bi-headset text-white fs-4" style="line-height: 1;"></i>
                     </div>
                 </div>
                 <h6 class="text-white text-opacity-75 small fw-bold mb-1 text-uppercase letter-spacing-1"><?= I18n::t('tickets') ?></h6>
