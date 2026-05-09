@@ -129,7 +129,7 @@ $isChat      = (strpos($route, 'chat') === 0);
                 <button class="btn-option" onclick="handleUserInput('nav_crear_proyecto')">🚀 <?= I18n::getLang() === 'en' ? 'Create Project' : 'Crear Proyecto' ?></button>
                 <button class="btn-option" onclick="handleUserInput('informacion')">ℹ️ <?= I18n::getLang() === 'en' ? 'Information' : 'Información' ?></button>
                 <button class="btn-option" onclick="handleUserInput('estado')">📍 <?= I18n::getLang() === 'en' ? 'View Status' : 'Ver Estado' ?></button>
-                <button class="btn-option" onclick="handleUserInput('crear ticket')">🎫 <?= I18n::getLang() === 'en' ? 'Create Ticket' : 'Crear Ticket' ?></button>
+                <button class="btn-option" onclick="handleUserInput('nav_crear_ticket')">🎫 <?= I18n::getLang() === 'en' ? 'Create Ticket' : 'Crear Ticket' ?></button>
                 <button class="btn-option" onclick="handleUserInput('horarios')">🕒 <?= I18n::getLang() === 'en' ? 'Business Hours' : 'Horarios' ?></button>
             </div>
         </div>

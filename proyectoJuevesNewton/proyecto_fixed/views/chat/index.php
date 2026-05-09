@@ -137,7 +137,7 @@ function loadChat(id, name) {
 }
 
 function fetchMessages() {
-    if (!currentChatId) return;
+    if (!currentChatId || currentChatId === 'bot') return;
     
     fetch('<?= url("chat/getMessages") ?>?contacto_id=' + currentChatId)
         .then(res => res.json())
@@ -182,7 +182,7 @@ document.getElementById('chat-form').onsubmit = (e) => {
         if (typeof handleUserInput === 'function') {
             handleUserInput(msg);
             setTimeout(renderBotHistory, 100);
-            setTimeout(renderBotHistory, 600); // Para capturar la respuesta del bot que tiene un retraso de 400ms
+            setTimeout(renderBotHistory, 600);
         }
         return;
     }
