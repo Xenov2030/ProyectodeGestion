@@ -1,11 +1,24 @@
 -- ============================================================
 -- GESTOR PRO - Schema SQL v2.0 (Producción)
--- DBA: Revisión completa de integridad relacional y multi-tenancy
 -- ============================================================
+-- INSTRUCCIONES DE IMPORTACIÓN:
+--   1. Abre phpMyAdmin en http://localhost/phpmyadmin
+--   2. Haz clic en "Importar" (desde la pantalla de inicio, SIN seleccionar BD)
+--   3. Selecciona este archivo y haz clic en "Continuar"
+--   El script creará la base de datos automáticamente.
+-- ============================================================
+
+-- Crear la base de datos si no existe
+CREATE DATABASE IF NOT EXISTS `gestor_pro`
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+-- Seleccionar la base de datos
+USE `gestor_pro`;
 
 -- Configuración inicial del entorno
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET FOREIGN_KEY_CHECKS = 0;  -- Desactivar temporalmente para crear y borrar sin bloqueos
+SET FOREIGN_KEY_CHECKS = 0;
 SET time_zone = "+00:00";
 SET NAMES utf8mb4;
 

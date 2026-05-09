@@ -9,15 +9,21 @@ use app\Controllers\UserController;
 use app\Controllers\ProjectController;
 use app\Controllers\TicketController;
 use app\Controllers\ChatController;
+use app\Controllers\LanguageController;
 
 // ─── Dashboard ────────────────────────────────────────────────
 $router->get('/',          [DashboardController::class, 'index']);
 $router->get('dashboard',  [DashboardController::class, 'index']);
 
+// ─── Idioma ───────────────────────────────────────────────────
+$router->get('lang',       [LanguageController::class, 'switch']);
+
 // ─── Autenticacion ────────────────────────────────────────────
-$router->get('login',      [AuthController::class, 'showLogin']);
-$router->post('login',     [AuthController::class, 'login']);
-$router->get('logout',     [AuthController::class, 'logout']);
+$router->get('login',          [AuthController::class, 'showLogin']);
+$router->post('login',         [AuthController::class, 'login']);
+$router->post('login/forgot',  [AuthController::class, 'forgotPassword']);
+$router->post('login/request', [AuthController::class, 'requestAccount']);
+$router->get('logout',         [AuthController::class, 'logout']);
 
 // ─── Usuarios ─────────────────────────────────────────────────
 $router->get('users',          [UserController::class, 'index']);

@@ -1,0 +1,2 @@
+# Este archivo existe para que Git rastree la carpeta uploads/ vacía.
+# Los archivos subidos por usuarios son ignorados por .gitignore.

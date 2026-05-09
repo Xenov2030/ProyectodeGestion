@@ -9,10 +9,10 @@ use app\Core\I18n;
         <div class="card border-0 p-4 h-100 position-relative overflow-hidden" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
             <div class="position-relative z-1">
                 <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="bg-white bg-opacity-20 rounded-3 p-2">
-                        <i class="bi bi-folder2-open text-white fs-4"></i>
+                    <div class="rounded-3 p-2" style="background-color: rgba(255, 255, 255, 0.2);">
+                        <i class="bi bi-layers text-white fs-4" style="line-height: 1;"></i>
                     </div>
-                    <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-3">Live</span>
+                    <span class="badge rounded-pill px-3" style="background-color: rgba(255, 255, 255, 0.2); color: white;">Live</span>
                 </div>
                 <h6 class="text-white text-opacity-75 small fw-bold mb-1 text-uppercase letter-spacing-1"><?= I18n::t('projects') ?></h6>
                 <h3 class="text-white fw-bold mb-2"><?= I18n::t('active_tasks') ?></h3>
@@ -21,7 +21,7 @@ use app\Core\I18n;
             <a href="<?= url('proyectos') ?>" class="stretched-link"></a>
             <!-- Decoration -->
             <div class="position-absolute" style="bottom: -20px; right: -20px; opacity: 0.1;">
-                <i class="bi bi-folder2-open text-white" style="font-size: 120px;"></i>
+                <i class="bi bi-layers text-white" style="font-size: 120px;"></i>
             </div>
         </div>
     </div>
@@ -30,8 +30,8 @@ use app\Core\I18n;
         <div class="card border-0 p-4 h-100 position-relative overflow-hidden" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
             <div class="position-relative z-1">
                 <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div class="bg-white bg-opacity-20 rounded-3 p-2">
-                        <i class="bi bi-shield-check text-white fs-4"></i>
+                    <div class="rounded-3 p-2" style="background-color: rgba(255, 255, 255, 0.2);">
+                        <i class="bi bi-headset text-white fs-4" style="line-height: 1;"></i>
                     </div>
                 </div>
                 <h6 class="text-white text-opacity-75 small fw-bold mb-1 text-uppercase letter-spacing-1"><?= I18n::t('tickets') ?></h6>
@@ -40,7 +40,7 @@ use app\Core\I18n;
             </div>
             <a href="<?= url('tickets') ?>" class="stretched-link"></a>
             <div class="position-absolute" style="bottom: -20px; right: -20px; opacity: 0.1;">
-                <i class="bi bi-shield-check text-white" style="font-size: 120px;"></i>
+                <i class="bi bi-headset text-white" style="font-size: 120px;"></i>
             </div>
         </div>
     </div>
@@ -67,27 +67,10 @@ use app\Core\I18n;
                 <h5 class="fw-bold m-0"><?= I18n::t('recent_activity') ?></h5>
                 <button class="btn btn-sm btn-light border rounded-pill px-3"><?= I18n::t('projects') ?></button>
             </div>
-            <div class="list-group list-group-flush">
-                <div class="list-group-item border-0 px-0 py-3 d-flex align-items-center gap-3">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
-                        <i class="bi bi-plus-lg fs-5"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-bold small"><?= I18n::t('new_project_assigned') ?></div>
-                        <div class="text-muted" style="font-size: 0.7rem;">2 <?= I18n::t('ago') ?></div>
-                    </div>
-                    <i class="bi bi-chevron-right text-muted small"></i>
-                </div>
-                <div class="list-group-item border-0 px-0 py-3 d-flex align-items-center gap-3">
-                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-2" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
-                        <i class="bi bi-chat-text fs-5"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-bold small"><?= I18n::t('ticket_responded') ?></div>
-                        <div class="text-muted" style="font-size: 0.7rem;"><?= I18n::t('yesterday') ?></div>
-                    </div>
-                    <i class="bi bi-chevron-right text-muted small"></i>
-                </div>
+            
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                <small><?= I18n::t('no_recent_activity') ?? 'No hay actividad reciente para mostrar' ?></small>
             </div>
         </div>
     </div>
