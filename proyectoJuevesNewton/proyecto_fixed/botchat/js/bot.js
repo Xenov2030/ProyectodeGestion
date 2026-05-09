@@ -180,16 +180,20 @@ async function handleUserInput(inputText) {
 }
 
 // Inicialización de Eventos y Carga de Datos
-async function initBot() {
-    // Intentar cargar el JSON
-    try {
-        const response = await fetch(KNOWLEDGE_PATH);
-        if (response.ok) {
-            botKnowledge = await response.json();
-        }
-    } catch (e) {
-        console.warn("No se pudo cargar el JSON de conocimiento, usando modo básico.");
-    }
+function initBot() {
+    // Intentar cargar el JSON sin bloquear
+    fetch(KNOWLEDGE_PATH)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then(data => {
+            if (data) botKnowledge = data;
+        })
+        .catch(e => {
+            console.warn("No se pudo cargar el JSON de conocimiento, usando modo básico.");
+        });
 
     const input = document.getElementById('bot-input');
     const sendBtn = document.getElementById('bot-send');
