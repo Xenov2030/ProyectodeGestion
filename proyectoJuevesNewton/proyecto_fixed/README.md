@@ -70,6 +70,7 @@ proyecto_fixed/
 | **Mensajería** | Chat interno entre empleados y clientes |
 | **Proyectos** | Creación y seguimiento de proyectos por empresa |
 | **Tickets** | Sistema de soporte organizado por estado y prioridad |
+| **Usuarios** | Sistema de gestión de usuarios |
 
 ---
 

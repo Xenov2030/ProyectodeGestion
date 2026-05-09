@@ -24,56 +24,55 @@
                 <table class="table align-middle m-0" style="font-size: 0.9rem;">
                     <thead class="bg-light text-secondary text-uppercase" style="font-size: 0.75rem; letter-spacing: 1px;">
                         <tr>
-                            <th class="py-4 ps-4 border-0">USUARIO</th>
-                            <th class="py-4 border-0">EMAIL</th>
-                            <th class="py-4 border-0">ROL</th>
-                            <th class="py-4 border-0">ESTADO</th>
-                            <th class="py-4 pe-4 text-end border-0">ACCIONES</th>
+                            <th class="px-8 py-6 border-0">USUARIO</th>
+                            <th class="px-8 py-6 text-center border-0">EMAIL</th>
+                            <th class="px-8 py-6 text-center border-0">ROL</th>
+                            <th class="px-8 py-6 text-center border-0">ESTADO</th>
+                            <th class="px-8 py-6 text-end border-0">ACCIONES</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         <?php foreach ($usuarios as $user): ?>
                             <tr class="hover:bg-slate-50/50 transition-all group">
                                 <td class="px-8 py-6">
-                                    <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-3">
                                         <div
-                                            class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center font-bold group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                                            class="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center font-bold group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
                                             <?= substr($user['nombre'], 0, 1) ?>
                                         </div>
-                                        <div>
-                                            <p class="text-slate-900 font-bold"><?= htmlspecialchars($user['nombre']); ?></p>
-                                            <p class="text-xs text-slate-500 font-medium">
-                                                <?= htmlspecialchars($user['email']); ?></p>
-                                        </div>
+                                        <p class="text-slate-900 font-semibold"><?= htmlspecialchars($user['nombre']); ?></p>
                                     </div>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-8 py-6 text-center">
+                                    <p class="text-slate-700"><?= htmlspecialchars($user['email']); ?></p>
+                                </td>
+                                <td class="px-8 py-6 text-center">
                                     <span
-                                        class="px-4 py-1.5 bg-slate-100 text-slate-700 rounded-full text-[10px] font-black uppercase tracking-tighter">
+                                        class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-bold uppercase">
                                         <?= htmlspecialchars($user['rol_nombre']); ?>
                                     </span>
                                 </td>
                                 <td class="px-8 py-6 text-center">
                                     <?php if ($user['estado'] == 'activo'): ?>
                                         <span
-                                            class="px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-tighter">Activo</span>
+                                            class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold uppercase">Activo</span>
                                     <?php else: ?>
                                         <span
-                                            class="px-4 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-black uppercase tracking-tighter">Inactivo</span>
+                                            class="px-3 py-1 bg-rose-100 text-rose-700 rounded-full text-xs font-bold uppercase">Inactivo</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="px-8 py-6 text-right">
+                                <td class="px-8 py-6 text-end">
                                     <div class="flex items-center justify-end gap-2">
                                         <a href="<?= url('users/edit?id=' . $user['id']) ?>"
-                                            class="w-10 h-10 bg-slate-50 hover:bg-indigo-600 hover:text-white rounded-xl flex items-center justify-center transition-all shadow-sm">
+                                            class="w-9 h-9 bg-slate-50 hover:bg-indigo-600 hover:text-white rounded-lg flex items-center justify-center transition-all shadow-sm text-sm">
                                             ✏️
                                         </a>
                                         <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
                                             <form action="/usuarios/eliminar" method="POST"
-                                                onsubmit="return confirm('Are you sure?')" class="inline">
+                                                onsubmit="return confirm('¿Está seguro?')" class="inline">
                                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                                 <button type="submit"
-                                                    class="w-10 h-10 bg-slate-50 hover:bg-rose-600 hover:text-white rounded-xl flex items-center justify-center transition-all shadow-sm">
+                                                    class="w-9 h-9 bg-slate-50 hover:bg-rose-600 hover:text-white rounded-lg flex items-center justify-center transition-all shadow-sm text-sm">
                                                     🗑️
                                                 </button>
                                             </form>
