@@ -1,14 +1,4 @@
-# .htaccess para Apache en WAMP
-# Redirigir todas las peticiones a public/index.php
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Redirigir la raíz al index de public
-    RewriteRule ^$ public/index.php [L]
-    
-    # Si el archivo o directorio no existe en la raíz, buscar en public
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ public/index.php [L,QSA]
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
 </IfModule>

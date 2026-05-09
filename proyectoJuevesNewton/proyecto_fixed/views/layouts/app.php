@@ -150,7 +150,8 @@ $isChat      = (strpos($route, 'chat') === 0);
         if (!isOpen) document.getElementById('bot-input').focus();
     }
     const KNOWLEDGE_PATH = "<?= url('botchat/js/bot_conocimiento.json') ?>";
+    const BASE_URL = "<?= url('') ?>";
 </script>
-<script src="<?= url('botchat/js/bot.js') ?>"></script>
+<script src="<?= url('botchat/js/bot.js?v=' . time()) ?>"></script>
 </body>
 </html>
