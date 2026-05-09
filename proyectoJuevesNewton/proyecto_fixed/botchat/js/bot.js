@@ -54,7 +54,7 @@ function addOptions(options) {
 }
 
 // Lógica principal de procesamiento
-async function handleUserInput(inputText) {
+window.handleUserInput = async function(inputText) {
     if (!inputText || inputText.trim() === "") return;
 
     const isEn = document.documentElement.lang === 'en';
@@ -193,15 +193,13 @@ async function handleUserInput(inputText) {
 }
 
 // Inicialización de Eventos y Carga de Datos
-async function initBot() {
-    // Intentar cargar el JSON
-    try {
-        const response = await fetch(KNOWLEDGE_PATH);
-        if (response.ok) {
-            botKnowledge = await response.json();
-        }
-    } catch (e) {
-        console.warn("No se pudo cargar el JSON de conocimiento, usando modo básico.");
+function initBot() {
+    // Intentar cargar el JSON sin bloquear
+    if (typeof KNOWLEDGE_PATH !== 'undefined') {
+        fetch(KNOWLEDGE_PATH)
+            .then(response => response.ok ? response.json() : null)
+            .then(data => { if (data) botKnowledge = data; })
+            .catch(e => console.warn("No se pudo cargar el JSON, usando modo básico."));
     }
 
     const input = document.getElementById('bot-input');
