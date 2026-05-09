@@ -1,13 +1,16 @@
-<div class="flex justify-between items-center mb-10">
+<?php
+// views/users/index.php
+?>
+<div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Team & Clients</h2>
-        <p class="text-slate-500 mt-1">Manage users, roles, and system access.</p>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Gestión de usuarios</h2>
+        <p class="text-slate-500 mt-1">Gestione usuarios, roles y acceso al sistema.</p>
     </div>
     <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])): 
         ?>
     <a href="<?= url('usuarios/crear') ?>" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg hover:shadow-indigo-200 flex items-center gap-2 active:scale-95">
         <span class="text-xl">+</span>
-        <span>Add User</span>
+        <span>Crear Usuario</span>
     </a>
     <?php endif; ?>
 </div>
@@ -17,10 +20,10 @@
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-slate-50 border-b border-slate-100 text-[10px] text-slate-500 uppercase tracking-widest font-black">
-                    <th class="px-8 py-5">User Info</th>
-                    <th class="px-8 py-5">Role / Department</th>
-                    <th class="px-8 py-5 text-center">Status</th>
-                    <th class="px-8 py-5 text-right">Actions</th>
+                    <th class="px-8 py-5">Información del usuario</th>
+                    <th class="px-8 py-5">Rol/Departamento</th>
+                    <th class="px-8 py-5 text-center">Estado</th>
+                    <th class="px-8 py-5 text-right">Acciones</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -45,9 +48,9 @@
                     </td>
                     <td class="px-8 py-6 text-center">
                         <?php if($user['estado'] == 'activo'): ?>
-                            <span class="px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-tighter">Active</span>
+                            <span class="px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-tighter">Activo</span>
                         <?php else: ?>
-                            <span class="px-4 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-black uppercase tracking-tighter">Inactive</span>
+                            <span class="px-4 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-black uppercase tracking-tighter">Inactivo</span>
                         <?php endif; ?>
                     </td>
                     <td class="px-8 py-6 text-right">

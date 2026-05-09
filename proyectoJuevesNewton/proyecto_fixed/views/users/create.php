@@ -1,45 +1,44 @@
-<div class="max-w-lg mx-auto">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Nuevo Usuario</h2>
+<?php // views/users/create.php ?>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <form action="/proyectos/gestor-pro/public/users/create" method="POST">
-            
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                <input type="text" name="nombre" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" name="email" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                <input type="password" name="password" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                <input type="text" name="telefono" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Rol</label>
-                <select name="rol" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="superadmin">Super Admin</option>
-                    <option value="administrativo">Administrativo</option>
-                    <option value="profesional">Profesional</option>
-                    <option value="cliente">Cliente</option>
-                    <option value="prospecto">Prospecto</option>
-                </select>
-            </div>
-
-            <div class="flex justify-end gap-3">
-                <a href="/proyectos/gestor-pro/public/users" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">Cancelar</a>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Guardar</button>
-            </div>
-
-        </form>
+<div class="max-w-4xl mx-auto">
+    <div class="mb-10">
+        <a href="<?= url('users') ?>"
+           class="text-indigo-600 font-bold text-sm hover:underline flex items-center gap-2 mb-4">
+            ← Volver a Usuarios
+        </a>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Nuevo usuario</h2>
+        <p class="text-slate-500 mt-1">Complete la información para crear un nuevo usuario.</p>
     </div>
-</div>
+
+    <?php if (!empty($error)): ?>
+        <div class="mb-6 px-6 py-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-2xl text-sm font-medium">
+            <?= htmlspecialchars($error) ?>
+        </div>
+    <?php endif; ?>
+
+    <form action="<?= url('users/create') ?>" method="POST"
+          class="bg-white rounded-3xl shadow-xl border border-slate-200 p-10">
+
+        <?= \app\Core\Controller::csrf_field() ?>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <!-- Columna izquierda -->
+            <div class="space-y-8">
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-black uppercase tracking-widest text-slate-400">Nombre completo</label>
+                    <input type="text" name="nombre" required placeholder="ej. María Pérez"
+                           class="bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-slate-700 font-medium focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-black uppercase tracking-widest text-slate-400">Email</label>
+                    <input type="email" name="email" required placeholder="ej. mail@empresa.com"
+                           class="bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-slate-700 font-medium focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-black uppercase tracking-widest text-slate-400">
+                        Teléfono <span class="normal-case font-medium text-slate-300">(opcional)</span>
+                    </label>
+                    <input type="text" name="telefono" placeholder="ej. 54 9 261 5678900"

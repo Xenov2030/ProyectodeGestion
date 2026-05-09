@@ -11,6 +11,7 @@ $isDashboard = ($route === '' || $route === 'dashboard');
 $isProyectos = (strpos($route, 'proyectos') === 0);
 $isTickets   = (strpos($route, 'tickets') === 0);
 $isChat      = (strpos($route, 'chat') === 0);
+$isUsers     = (strpos($route, 'users') === 0);
 ?>
 <!DOCTYPE html>
 <html lang="<?= I18n::getLang() ?>">
@@ -62,6 +63,7 @@ $isChat      = (strpos($route, 'chat') === 0);
             <a href="<?= url('proyectos') ?>" class="nav-link <?= $isProyectos ? 'active' : '' ?>"><i class="bi bi-layers"></i> <?= I18n::t('projects') ?></a>
             <a href="<?= url('tickets') ?>" class="nav-link <?= $isTickets ? 'active' : '' ?>"><i class="bi bi-shield-check"></i> <?= I18n::t('tickets') ?></a>
             <a href="<?= url('chat') ?>" class="nav-link <?= $isChat ? 'active' : '' ?>"><i class="bi bi-chat-left-dots"></i> <?= I18n::t('chat') ?></a>
+            <a href="<?= url('users') ?>" class="nav-link <?= $isUsers ? 'active' : '' ?>"><i class="bi bi-person"></i> <?= I18n::t('users') ?></a>
         </div>
         <div class="position-absolute bottom-0 w-100 p-4 border-top border-secondary border-opacity-10">
             <a href="<?= url('logout') ?>" class="text-decoration-none text-danger small fw-bold"><i class="bi bi-box-arrow-left me-2"></i> <?= I18n::t('logout') ?></a>
