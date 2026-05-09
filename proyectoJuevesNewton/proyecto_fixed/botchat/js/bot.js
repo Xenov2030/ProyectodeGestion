@@ -66,6 +66,11 @@ async function handleUserInput(inputText) {
         window.location.href = BASE_URL + '/tickets';
         return;
     }
+    if (lowerInput === 'nav_crear_proyecto') {
+        // Redirigir a crear ticket con prellenado para proyecto
+        window.location.href = BASE_URL + '/tickets/crear?asunto=Solicitud%20de%20Nuevo%20Proyecto';
+        return;
+    }
 
     let responseText = isEn 
         ? "I'm sorry, I don't have a specific answer for that. Could you try another word or use the options?"
@@ -97,6 +102,32 @@ async function handleUserInput(inputText) {
             { label: "🎫 Tickets", value: "nav_tickets" }
         ];
     }
+    // Flujos especiales: Información
+    else if (lowerInput === 'informacion' || lowerInput === 'información' || lowerInput === 'info' || lowerInput === 'information') {
+        responseText = isEn ? "What kind of information do you need?" : "¿Qué tipo de información necesitas?";
+        options = isEn ? [
+            { label: "🛠️ Services", value: "servicios" },
+            { label: "💲 Pricing", value: "precios" },
+            { label: "📞 Contact", value: "contacto" }
+        ] : [
+            { label: "🛠️ Servicios", value: "servicios" },
+            { label: "💲 Precios", value: "precios" },
+            { label: "📞 Contacto", value: "contacto" }
+        ];
+    }
+    else if (lowerInput === 'servicios' || lowerInput === 'services') {
+        responseText = isEn ? "We offer custom software development, web applications, and technical support." : "Ofrecemos desarrollo de software a medida, aplicaciones web y soporte técnico.";
+    }
+    else if (lowerInput === 'precios' || lowerInput === 'pricing') {
+        responseText = isEn ? "Our prices depend on the project scope. Please create a ticket to request a quote." : "Nuestros precios dependen del alcance del proyecto. Por favor crea un ticket para solicitar una cotización.";
+    }
+    else if (lowerInput === 'contacto' || lowerInput === 'contact') {
+        responseText = isEn ? "You can contact us via email at info@vexstudio.online or create a ticket." : "Puedes contactarnos por email a info@vexstudio.online o creando un ticket.";
+    }
+    // Flujos especiales: Horarios
+    else if (lowerInput === 'horarios' || lowerInput === 'hours') {
+        responseText = isEn ? "Our business hours are Monday to Friday from 9:00 AM to 6:00 PM." : "Nuestros horarios de atención son de Lunes a Viernes de 9:00 AM a 6:00 PM.";
+    }
     else {
         // 3. Buscar en el conocimiento cargado
         if (botKnowledge) {
@@ -124,11 +155,15 @@ async function handleUserInput(inputText) {
                 responseText = isEn ? "Hello! How can I help you today?" : "¡Hola! ¿En qué te puedo ayudar hoy?";
             }
             options = isEn ? [
-                { label: "📍 View States", value: "status" },
+                { label: "🚀 Create Project", value: "nav_crear_proyecto" },
+                { label: "ℹ️ Information", value: "information" },
+                { label: "📍 View Status", value: "status" },
                 { label: "🎫 Create Ticket", value: "create ticket" },
                 { label: "🕒 Business Hours", value: "hours" }
             ] : [
-                { label: "📍 Ver Estados", value: "estado" },
+                { label: "🚀 Crear Proyecto", value: "nav_crear_proyecto" },
+                { label: "ℹ️ Información", value: "informacion" },
+                { label: "📍 Ver Estado", value: "estado" },
                 { label: "🎫 Crear Ticket", value: "crear ticket" },
                 { label: "🕒 Horarios", value: "horarios" }
             ];
@@ -185,11 +220,15 @@ async function initBot() {
     setTimeout(() => {
         const isEn = document.documentElement.lang === 'en';
         addOptions(isEn ? [
-            { label: "📍 View States", value: "status" },
+            { label: "🚀 Create Project", value: "nav_crear_proyecto" },
+            { label: "ℹ️ Information", value: "information" },
+            { label: "📍 View Status", value: "status" },
             { label: "🎫 Create Ticket", value: "create ticket" },
             { label: "🕒 Business Hours", value: "hours" }
         ] : [
-            { label: "📍 Ver Estados", value: "estado" },
+            { label: "🚀 Crear Proyecto", value: "nav_crear_proyecto" },
+            { label: "ℹ️ Información", value: "informacion" },
+            { label: "📍 Ver Estado", value: "estado" },
             { label: "🎫 Crear Ticket", value: "crear ticket" },
             { label: "🕒 Horarios", value: "horarios" }
         ]);
