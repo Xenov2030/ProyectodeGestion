@@ -2,7 +2,11 @@
 
 let botKnowledge = null;
 
-// Función para añadir mensajes al chat
+// Cargar conocimiento inmediatamente
+fetch(KNOWLEDGE_PATH)
+    .then(res => res.ok ? res.json() : null)
+    .then(data => { if (data) botKnowledge = data; });
+
 function addMessage(text, sender = 'bot') {
     const container = document.getElementById('bot-content');
     if (container) {
@@ -10,16 +14,18 @@ function addMessage(text, sender = 'bot') {
         div.className = `msg ${sender}`;
         div.innerText = text;
         container.appendChild(div);
-        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+        container.scrollTop = container.scrollHeight;
     }
     
+    // Guardar en historial
     try {
         const history = JSON.parse(localStorage.getItem('bot_history') || '[]');
         history.push({sender: sender, text: text, time: new Date().toISOString()});
         if (history.length > 50) history.shift();
         localStorage.setItem('bot_history', JSON.stringify(history));
-    } catch(e) {}
+    } catch(e) { console.error("Error saving history:", e); }
     
+    // Sincronizar con la vista de chat si existe
     if (typeof renderBotHistory === 'function' && window.currentChatId === 'bot') {
         renderBotHistory();
     }
@@ -28,25 +34,20 @@ function addMessage(text, sender = 'bot') {
 function addOptions(options) {
     const container = document.getElementById('bot-content');
     if (!container) return;
-
-    const optionsDiv = document.createElement('div');
-    optionsDiv.className = 'bot-options';
-    
+    const div = document.createElement('div');
+    div.className = 'bot-options';
     options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'btn-option';
         btn.innerText = opt.label;
-        btn.onclick = () => handleUserInput(opt.value || opt.label);
-        optionsDiv.appendChild(btn);
+        btn.onclick = () => window.handleUserInput(opt.value || opt.label);
+        div.appendChild(btn);
     });
-    
-    container.appendChild(optionsDiv);
-    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
 }
 
-window.handleUserInput = async function(inputText) {
-    if (!inputText || inputText.trim() === "") return;
-
+window.botProcess = function(inputText) {
     const isEn = document.documentElement.lang === 'en';
     const lowerInput = inputText.toLowerCase().trim();
 
@@ -54,89 +55,50 @@ window.handleUserInput = async function(inputText) {
         addMessage(inputText, 'user');
     }
 
-    // Navegación
-    if (lowerInput.includes('nav_ticket_alta') || lowerInput.includes('nav_ticket_media') || lowerInput.includes('nav_ticket_baja')) {
-        const prio = lowerInput.split('_')[2];
-        window.location.href = BASE_URL + '/tickets/crear?prioridad=' + prio;
-        return;
-    }
-    if (lowerInput === 'nav_crear_ticket' || lowerInput === 'crear ticket' || lowerInput === 'create ticket') {
-        window.location.href = BASE_URL + '/tickets/crear';
-        return;
-    }
-    if (lowerInput === 'nav_proyectos' || lowerInput.includes('estado de mi proyecto')) {
-        window.location.href = BASE_URL + '/proyectos';
-        return;
-    }
-    if (lowerInput === 'nav_tickets') {
-        window.location.href = BASE_URL + '/tickets';
-        return;
-    }
+    // Lógica de navegación
     if (lowerInput === 'nav_crear_proyecto') {
         window.location.href = BASE_URL + '/tickets/crear?asunto=Solicitud%20de%20Nuevo%20Proyecto';
         return;
     }
+    if (lowerInput === 'nav_crear_ticket' || lowerInput === 'crear ticket') {
+        window.location.href = BASE_URL + '/tickets/crear';
+        return;
+    }
+    if (lowerInput === 'nav_proyectos' || lowerInput === 'proyectos') {
+        window.location.href = BASE_URL + '/proyectos';
+        return;
+    }
+    if (lowerInput === 'nav_tickets' || lowerInput === 'tickets') {
+        window.location.href = BASE_URL + '/tickets';
+        return;
+    }
 
-    let responseText = isEn ? "I'm sorry, I don't understand. Try the options." : "Lo siento, no entiendo. Prueba con las opciones.";
+    let response = isEn ? "I'm not sure about that." : "No estoy seguro de eso.";
     let options = [];
 
     if (lowerInput === 'estado' || lowerInput === 'status') {
-        responseText = isEn ? "What do you want to check?" : "¿Qué deseas revisar?";
-        options = isEn ? [
-            { label: "📂 Projects", value: "nav_proyectos" },
-            { label: "🎫 Tickets", value: "nav_tickets" }
-        ] : [
-            { label: "📂 Proyectos", value: "nav_proyectos" },
-            { label: "🎫 Tickets", value: "nav_tickets" }
-        ];
-    } else if (lowerInput === 'informacion' || lowerInput === 'información' || lowerInput === 'info') {
-        responseText = isEn ? "What info do you need?" : "¿Qué información necesitas?";
-        options = isEn ? [
-            { label: "🛠️ Services", value: "servicios" },
-            { label: "💲 Pricing", value: "precios" }
-        ] : [
-            { label: "🛠️ Servicios", value: "servicios" },
-            { label: "💲 Precios", value: "precios" }
-        ];
-    } else if (lowerInput === 'horarios' || lowerInput === 'hours') {
-        responseText = isEn ? "Mon-Fri 9AM-6PM" : "Lunes a Viernes 9AM a 6PM";
+        response = isEn ? "What do you want to see?" : "¿Qué deseas ver?";
+        options = [{label: isEn?'Projects':'Proyectos', value:'nav_proyectos'}, {label:'Tickets', value:'nav_tickets'}];
     } else {
-        if (botKnowledge) {
-            if (botKnowledge.respuestas) {
-                for (const [key, val] of Object.entries(botKnowledge.respuestas)) {
-                    if (lowerInput.includes(key)) { responseText = val; break; }
-                }
-            }
-        }
-        options = isEn ? [
-            { label: "🚀 New Project", value: "nav_crear_proyecto" },
-            { label: "🎫 New Ticket", value: "nav_crear_ticket" },
-            { label: "📍 Status", value: "estado" }
-        ] : [
-            { label: "🚀 Nuevo Proyecto", value: "nav_crear_proyecto" },
-            { label: "🎫 Nuevo Ticket", value: "nav_crear_ticket" },
-            { label: "📍 Ver Estado", value: "estado" }
+        // Fallback al menú principal
+        response = isEn ? "How can I help you?" : "¿En qué te puedo ayudar?";
+        options = [
+            {label: isEn?'New Project':'Nuevo Proyecto', value:'nav_crear_proyecto'},
+            {label: isEn?'New Ticket':'Nuevo Ticket', value:'nav_crear_ticket'},
+            {label: isEn?'View Status':'Ver Estado', value:'estado'}
         ];
     }
 
     setTimeout(() => {
-        addMessage(responseText, 'bot');
-        if (options.length > 0) setTimeout(() => addOptions(options), 300);
+        addMessage(response, 'bot');
+        if (options.length > 0) setTimeout(() => addOptions(options), 200);
     }, 400);
-}
+};
 
-function initBot() {
-    if (typeof KNOWLEDGE_PATH !== 'undefined') {
-        fetch(KNOWLEDGE_PATH).then(res => res.ok ? res.json() : null).then(data => { if (data) botKnowledge = data; });
-    }
+// Eventos de entrada
+document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('bot-input');
-    const sendBtn = document.getElementById('bot-send');
-    if (sendBtn) sendBtn.onclick = () => { const v = input.value; input.value = ''; handleUserInput(v); };
-    if (input) input.onkeydown = (e) => { if (e.key === 'Enter') { handleUserInput(input.value); input.value = ''; } };
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBot);
-} else {
-    initBot();
-}
+    const btn = document.getElementById('bot-send');
+    if (btn) btn.onclick = () => { const v = input.value; input.value = ''; window.handleUserInput(v); };
+    if (input) input.onkeydown = (e) => { if (e.key === 'Enter') { window.handleUserInput(input.value); input.value = ''; } };
+});
