@@ -5,16 +5,29 @@ let botKnowledge = null;
 // Función para añadir mensajes al chat
 function addMessage(text, sender = 'bot') {
     const container = document.getElementById('bot-content');
-    if (!container) return;
+    if (container) {
+        const div = document.createElement('div');
+        div.className = `msg ${sender}`;
+        div.innerText = text;
+        container.appendChild(div);
+        
+        // Scroll suave al final
+        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
     
-    const div = document.createElement('div');
-    div.className = `msg ${sender}`;
-    div.innerText = text;
-    container.appendChild(div);
+    // Guardar en historial (localStorage)
+    try {
+        const history = JSON.parse(localStorage.getItem('bot_history') || '[]');
+        history.push({sender: sender, text: text, time: new Date().toISOString()});
+        localStorage.setItem('bot_history', JSON.stringify(history));
+    } catch(e) {}
     
-    // Scroll suave al final
-    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-    return div;
+    // Si estamos en la página de chat y viendo el bot, renderizar
+    if (typeof renderBotHistory === 'function' && window.currentChatId === 'bot') {
+        renderBotHistory();
+    }
+    
+    return container;
 }
 
 // Función para añadir botones de opciones

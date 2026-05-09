@@ -12,6 +12,16 @@ use app\Core\I18n;
                     <h5 class="fw-bold m-0"><?= I18n::t('chat') ?></h5>
                 </div>
                 <div class="flex-grow-1 overflow-auto list-group list-group-flush">
+                    <!-- Bot Contact -->
+                    <button onclick="loadBotChat()" class="list-group-item list-group-item-action border-0 px-4 py-3 d-flex align-items-center gap-3 transition-all bg-light">
+                        <div class="bg-primary bg-opacity-20 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 44px; height: 44px; min-width: 44px;">
+                            <i class="bi bi-robot fs-5"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="fw-bold small text-truncate">GestorBot</div>
+                            <div class="text-muted small text-truncate" style="font-size: 0.65rem;">ASISTENTE VIRTUAL</div>
+                        </div>
+                    </button>
                     <?php foreach ($usuarios as $u): ?>
                         <?php if ($u['id'] != Session::get('user_id')): ?>
                             <button onclick="loadChat(<?= $u['id'] ?>, '<?= addslashes($u['nombre']) ?>')" 
@@ -70,6 +80,47 @@ use app\Core\I18n;
 let currentChatId = null;
 let refreshInterval = null;
 
+function loadBotChat() {
+    currentChatId = 'bot';
+    document.getElementById('chat-window').classList.add('d-flex');
+    document.getElementById('chat-window').classList.remove('d-none');
+    document.getElementById('chat-placeholder').classList.add('d-none');
+    document.getElementById('chat-user-name').innerText = 'GestorBot';
+    document.getElementById('destinatario_id').value = 'bot';
+    
+    if (refreshInterval) clearInterval(refreshInterval);
+    renderBotHistory();
+}
+
+function renderBotHistory() {
+    const container = document.getElementById('chat-messages-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const history = JSON.parse(localStorage.getItem('bot_history') || '[]');
+    
+    if (history.length === 0) {
+        history.push({sender: 'bot', text: '¡Hola! ¿En qué puedo ayudarte hoy?', time: new Date().toISOString()});
+        localStorage.setItem('bot_history', JSON.stringify(history));
+    }
+
+    history.forEach(m => {
+        const isMe = m.sender === 'user';
+        const div = document.createElement('div');
+        div.className = `p-3 rounded-4 shadow-sm ${isMe ? 'bg-primary text-white align-self-end' : 'bg-white text-dark align-self-start'}`;
+        div.style.maxWidth = '70%';
+        div.style.borderRadius = isMe ? '16px 16px 4px 16px' : '16px 16px 16px 4px';
+        
+        div.innerHTML = `
+            <div class="small">${m.text}</div>
+            <div class="text-end mt-1" style="font-size: 0.6rem; opacity: 0.6;">
+                ${new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            </div>
+        `;
+        container.appendChild(div);
+    });
+    container.scrollTop = container.scrollHeight;
+}
+
 function loadChat(id, name) {
     currentChatId = id;
     document.getElementById('chat-window').classList.add('d-flex');
@@ -125,6 +176,16 @@ document.getElementById('chat-form').onsubmit = (e) => {
     const input = document.getElementById('chat-input');
     const msg = input.value.trim();
     if (!msg || !currentChatId) return;
+
+    if (currentChatId === 'bot') {
+        input.value = '';
+        if (typeof handleUserInput === 'function') {
+            handleUserInput(msg);
+            setTimeout(renderBotHistory, 100);
+            setTimeout(renderBotHistory, 600); // Para capturar la respuesta del bot que tiene un retraso de 400ms
+        }
+        return;
+    }
     
     const formData = new FormData();
     formData.append('destinatario_id', currentChatId);
