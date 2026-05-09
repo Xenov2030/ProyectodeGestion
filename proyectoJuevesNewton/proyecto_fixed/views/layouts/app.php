@@ -140,6 +140,7 @@ use app\Core\I18n;
         if (!isOpen) document.getElementById('bot-input').focus();
     }
     const KNOWLEDGE_PATH = "<?= url('botchat/js/bot_conocimiento.json') ?>";
+    const BASE_URL = "<?= url('') ?>";
 </script>
 <script src="<?= url('botchat/js/bot.js') ?>"></script>
 </body>
