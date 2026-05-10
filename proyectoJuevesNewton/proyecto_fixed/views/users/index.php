@@ -109,7 +109,7 @@
                                         </a>
                                         <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
                                             <form action="<?= url('users/delete') ?>" method="POST"
-                                                onsubmit="return confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.')"
+                                                onsubmit="return confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer. Si cree que es una acción que requiere revertir, se sugiere desactivar el usuario en lugar de eliminarlo.')"
                                                 class="d-flex">
                                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                                 <button type="submit"
