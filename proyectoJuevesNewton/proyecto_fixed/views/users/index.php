@@ -1,79 +1,99 @@
-<?php
-// views/users/index.php
-?>
+<?php // views/users/index.php ?>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Gestión de usuarios</h2>
-        <p class="text-slate-500 mt-1">Gestione usuarios, roles y acceso al sistema.</p>
+        <h2 class="fw-bold mb-1">Gestión de Usuarios</h2>
+        <p class="text-muted small mb-0">Gestiona usuarios, roles y acceso al sistema.</p>
     </div>
-    <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])):
-        ?>
-        <a href="<?= url('users/create') ?>" class="btn text-white fw-bold px-4 py-2 border-0 shadow-sm"
-            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px;">
-            <i class="bi bi-plus-lg me-2"></i> NUEVO USUARIO
+    <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
+        <a href="<?= url('users/create') ?>" class="btn btn-primary fw-semibold px-4 py-2 d-flex align-items-center gap-2">
+            <i class="bi bi-plus-lg"></i> Nuevo Usuario
         </a>
     <?php endif; ?>
 </div>
 
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+ <!-- arreglado con bootstrap -->
+
+<div class="card border-0 shadow-sm rounded-4">
     <div class="card-body p-0">
         <?php if (empty($usuarios)): ?>
-            <div class="p-5 text-center text-muted">No hay usuarios disponibles.</div>
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-people fs-2 d-block mb-2"></i>
+                No hay usuarios registrados.
+            </div>
         <?php else: ?>
             <div class="table-responsive">
-                <table class="table align-middle m-0" style="font-size: 0.9rem;">
-                    <thead class="bg-light text-secondary text-uppercase" style="font-size: 0.75rem; letter-spacing: 1px;">
-                        <tr>
-                            <th class="px-8 py-6 border-0">USUARIO</th>
-                            <th class="px-8 py-6 text-center border-0">EMAIL</th>
-                            <th class="px-8 py-6 text-center border-0">ROL</th>
-                            <th class="px-8 py-6 text-center border-0">ESTADO</th>
-                            <th class="px-8 py-6 text-end border-0">ACCIONES</th>
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.875rem;">
+                    <thead class="table-light border-bottom">
+                        <tr class="text-uppercase text-muted" style="font-size: 0.72rem; letter-spacing: 0.08em;">
+                            <th class="px-4 py-3 fw-semibold border-0">USUARIO</th>
+                            <th class="px-4 py-3 fw-semibold border-0">EMAIL</th>
+                            <th class="px-4 py-3 fw-semibold border-0 text-center">ROL</th>
+                            <th class="px-4 py-3 fw-semibold border-0 text-center">ESTADO</th>
+                            <th class="px-4 py-3 fw-semibold border-0 text-center">ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody>
                         <?php foreach ($usuarios as $user): ?>
-                            <tr class="hover:bg-slate-50/50 transition-all group">
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center font-bold group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
-                                            <?= substr($user['nombre'], 0, 1) ?>
+                            <tr>
+                                <!-- USUARIOS -->
+                                <td class="px-4 py-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-3 bg-primary bg-opacity-10 text-primary fw-bold d-flex align-items-center justify-content-center"
+                                            style="width:40px; height:40px; font-size:1rem; flex-shrink:0;">
+                                            <?= strtoupper(substr($user['nombre'], 0, 1)) ?>
                                         </div>
-                                        <p class="text-slate-900 font-semibold"><?= htmlspecialchars($user['nombre']); ?></p>
+                                        <span class="fw-semibold text-dark">
+                                            <?= htmlspecialchars($user['nombre']) ?>
+                                        </span>
                                     </div>
                                 </td>
-                                <td class="px-8 py-6 text-center">
-                                    <p class="text-slate-700"><?= htmlspecialchars($user['email']); ?></p>
+
+                                <!-- Email -->
+                                <td class="px-4 py-3 text-muted">
+                                    <?= htmlspecialchars($user['email']) ?>
                                 </td>
-                                <td class="px-8 py-6 text-center">
+
+                                <!-- Rol -->
+                                <td class="px-4 py-3 text-center">
                                     <span
-                                        class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-bold uppercase">
-                                        <?= htmlspecialchars($user['rol_nombre']); ?>
+                                        class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary fw-semibold px-3 py-2"
+                                        style="font-size: 0.7rem; letter-spacing: 0.05em;">
+                                        <?= htmlspecialchars(strtoupper($user['rol_nombre'])) ?>
                                     </span>
                                 </td>
-                                <td class="px-8 py-6 text-center">
-                                    <?php if ($user['estado'] == 'activo'): ?>
-                                        <span
-                                            class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold uppercase">Activo</span>
+
+                                <!-- Estado -->
+                                <td class="px-4 py-3 text-center">
+                                    <?php if ($user['estado'] === 'activo'): ?>
+                                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-semibold px-3 py-2"
+                                            style="font-size: 0.7rem;">
+                                            <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i> Activo
+                                        </span>
                                     <?php else: ?>
-                                        <span
-                                            class="px-3 py-1 bg-rose-100 text-rose-700 rounded-full text-xs font-bold uppercase">Inactivo</span>
+                                        <span class="badge rounded-pill bg-danger bg-opacity-10 text-danger fw-semibold px-3 py-2"
+                                            style="font-size: 0.7rem;">
+                                            <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i> Inactivo
+                                        </span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="px-8 py-6 text-end">
-                                    <div class="flex items-center justify-end gap-2">
+
+                                <!-- Acciones -->
+                                <td class="px-4 py-3 text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
                                         <a href="<?= url('users/edit?id=' . $user['id']) ?>"
-                                            class="w-9 h-9 bg-slate-50 hover:bg-indigo-600 hover:text-white rounded-lg flex items-center justify-center transition-all shadow-sm text-sm">
-                                            ✏️
+                                            class="btn btn-sm btn-light border d-flex align-items-center justify-content-center"
+                                            style="width:34px; height:34px; border-radius:8px;" title="Editar usuario">
+                                            <i class="bi bi-pencil text-primary"></i>
                                         </a>
                                         <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
-                                            <form action="/usuarios/eliminar" method="POST"
-                                                onsubmit="return confirm('¿Está seguro?')" class="inline">
+                                            <form action="<?= url('users/delete') ?>" method="POST"
+                                                onsubmit="return confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.')" class="d-flex">
                                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                                 <button type="submit"
-                                                    class="w-9 h-9 bg-slate-50 hover:bg-rose-600 hover:text-white rounded-lg flex items-center justify-center transition-all shadow-sm text-sm">
-                                                    🗑️
+                                                    class="btn btn-sm btn-light border d-flex align-items-center justify-content-center"
+                                                    style="width:34px; height:34px; border-radius:8px;" title="Eliminar usuario">
+                                                    <i class="bi bi-trash text-danger"></i>
                                                 </button>
                                             </form>
                                         <?php endif; ?>
@@ -81,10 +101,9 @@
                                 </td>
                             </tr>
                         <?php endforeach; ?>
-
                     </tbody>
                 </table>
             </div>
-        </div>
-    <?php endif; ?>
+        <?php endif; ?>
+    </div>
 </div>

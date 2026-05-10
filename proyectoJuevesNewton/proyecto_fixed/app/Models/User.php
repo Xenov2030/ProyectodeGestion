@@ -44,13 +44,13 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // ✅ create() — agregar telefono al INSERT
+    // ✅ create() — agregar telefono y estado al INSERT
     public static function create($data)
     {
         $db = Database::getInstance()->getConnection();
         $stmt = $db->prepare("
-        INSERT INTO usuarios (nombre, email, password, rol_id, empresa_id, telefono)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO usuarios (nombre, email, password, rol_id, empresa_id, telefono, estado)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ");
         return $stmt->execute([
             $data['nombre'],
@@ -58,7 +58,8 @@ class User
             password_hash($data['password'], PASSWORD_DEFAULT),
             $data['rol_id'],
             $data['empresa_id'],
-            $data['telefono'] ?? null   // ← null si no se envió
+            $data['telefono'] ?: null,
+            $data['estado']
         ]);
     }
 
@@ -81,9 +82,10 @@ class User
         ]);
     }
 
-    /* public static function delete($id) {
-         $db = Database::getInstance()->getConnection();
-         $stmt = $db->prepare("DELETE FROM usuarios WHERE id = ?");
-         return $stmt->execute([$id]);
-     } */
+    public static function delete($id)
+    {
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("DELETE FROM usuarios WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }
