@@ -13,19 +13,27 @@ class UserController extends Controller
     public function index(): void
     {
         Session::checkRole(['admin', 'directivo', 'administrativo']);
-        // Corregido: era User::getAll() que no existe. El metodo correcto es User::all()
-        $usuarios = User::all();
-        $this->render('users/index', ['usuarios' => $usuarios]);
-    }
 
-    public function create(): void
-    {
-        Session::checkRole(['admin', 'directivo']);
+        $rolFiltro = $_GET['rol'] ?? null;
+        $paginaAct = max(1, (int) ($_GET['pagina'] ?? 1));
+        $porPagina = 10;
+
+        $usuarios = User::paginados($porPagina, $paginaAct, $rolFiltro);
+        $total = User::contar($rolFiltro);
+        $totalPags = (int) ceil($total / $porPagina);
+
         $db = Database::getInstancia();
         $roles = $db->query("SELECT * FROM roles")->fetchAll();
-        $this->render('users/create', ['roles' => $roles]);
-    }
 
+        $this->render('users/index', [
+            'usuarios' => $usuarios,
+            'roles' => $roles,
+            'rolFiltro' => $rolFiltro,
+            'paginaAct' => $paginaAct,
+            'totalPags' => $totalPags,
+            'total' => $total,
+        ]);
+    }
     public function store(): void
     {
         Session::checkRole(['admin', 'directivo']);
@@ -112,8 +120,10 @@ class UserController extends Controller
             'estado' => $_POST['estado'] ?? 'activo',
         ];
 
+        //mejora la seguridad de la actualización de contraseña: solo se actualiza si se completa el campo en la edición, y se hashea antes de guardarla
+
         if (!empty($_POST['password'])) {
-            $data['password'] = $_POST['password'];
+            $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         }
 
         if (User::update($id, $data)) {

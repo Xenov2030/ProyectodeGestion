@@ -10,7 +10,7 @@ class User
 
     /**
      * Busca un usuario por su correo electrónico.
-     * Implementa INNER JOIN con roles para obtener rol_nombre y utiliza Prepared Statements.
+     * Implementa INNER JOIN con roles para obtener rol_nombre, lo que evita tener que hacer consultas adicionales para mostrar el rol del usuario.
      */
     public static function findByEmail(string $email): ?array
     {
@@ -34,6 +34,55 @@ class User
     {
         $db = Database::getInstance()->getConnection();
         return $db->query("SELECT u.*, r.nombre AS rol_nombre FROM usuarios u INNER JOIN roles r ON u.rol_id = r.id")->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // acá se agrega el método de paginación para aplicar una manera de visualizar el listado de empleados, sin necesidad de cargar tantos a la vez, o scrollear infinitamente:
+    public static function paginados(int $porPagina, int $pagina, ?string $rol = null): array
+    {
+        $db = Database::getInstance()->getConnection();
+        $offset = ($pagina - 1) * $porPagina;
+
+        $sql = "SELECT u.*, r.nombre AS rol_nombre
+            FROM usuarios u
+            INNER JOIN roles r ON u.rol_id = r.id";
+
+        // Si se elige un rol específico, agregamos la condición WHERE para filtrar por ese rol
+        if ($rol) {
+            $sql .= " WHERE r.nombre = :rol";
+        }
+
+        $sql .= " LIMIT :limite OFFSET :offset";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':limite', $porPagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+
+        if ($rol) {
+            $stmt->bindValue(':rol', $rol);
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public static function contar(?string $rol = null): int
+    {
+        $db = Database::getInstance()->getConnection();
+        $sql = "SELECT COUNT(*) FROM usuarios u
+            INNER JOIN roles r ON u.rol_id = r.id";
+
+        if ($rol) {
+            $sql .= " WHERE r.nombre = :rol";
+        }
+
+        $stmt = $db->prepare($sql);
+
+        if ($rol) {
+            $stmt->bindValue(':rol', $rol);
+        }
+
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
     }
 
     public static function findById($id)
@@ -63,7 +112,7 @@ class User
         ]);
     }
 
-    // ✅ update() — agregar telefono al UPDATE
+    // le sumamos el teléfono al update, y el estado (activo/inactivo) para poder desactivar usuarios sin eliminarlos de la Base de datos (modo seguro de eliminación)
     public static function update($id, $data)
     {
         $db = Database::getInstance()->getConnection();

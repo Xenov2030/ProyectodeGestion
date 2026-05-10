@@ -12,14 +12,35 @@
     <?php endif; ?>
 </div>
 
- <!-- arreglado con bootstrap -->
+<!-- todo arreglado con bootstrap -->
+<!-- le ponemos un filtro de búsqueda por rol, para que se vea prolijo y busque si es mucha cantidad de usuarios -->
+
+<div class="mb-3">
+    <ul class="nav nav-tabs border-bottom">
+        <li class="nav-item">
+            <a class="nav-link <?= !$rolFiltro ? 'active fw-bold' : 'text-muted' ?>" href="<?= url('users') ?>">
+                Todos
+            </a>
+        </li>
+        <?php foreach ($roles as $rol): ?>
+            <li class="nav-item">
+                <a class="nav-link <?= $rolFiltro === $rol['nombre'] ? 'active fw-bold' : 'text-muted' ?>"
+                    href="<?= url('users?rol=' . urlencode($rol['nombre'])) ?>">
+                    <?= htmlspecialchars(ucfirst($rol['nombre'])) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+<!-- card con tabla -->
 
 <div class="card border-0 shadow-sm rounded-4">
     <div class="card-body p-0">
         <?php if (empty($usuarios)): ?>
             <div class="p-5 text-center text-muted">
                 <i class="bi bi-people fs-2 d-block mb-2"></i>
-                No hay usuarios registrados.
+                No hay usuarios registrados en esta categoría.
             </div>
         <?php else: ?>
             <div class="table-responsive">
@@ -88,7 +109,8 @@
                                         </a>
                                         <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
                                             <form action="<?= url('users/delete') ?>" method="POST"
-                                                onsubmit="return confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.')" class="d-flex">
+                                                onsubmit="return confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.')"
+                                                class="d-flex">
                                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                                 <button type="submit"
                                                     class="btn btn-sm btn-light border d-flex align-items-center justify-content-center"
@@ -104,6 +126,31 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Paginación -->
+            <?php if ($totalPags > 1): ?>
+                <div class="d-flex justify-content-between align-items-center px-4 py-3 border-top">
+                    <span class="text-muted small">
+                        Página <?= $paginaAct ?> de <?= $totalPags ?>
+                        · <?= $total ?> usuario<?= $total !== 1 ? 's' : '' ?>
+                    </span>
+                    <div class="d-flex gap-2">
+                        <?php
+                        $urlBase = $rolFiltro
+                            ? url('users?rol=' . urlencode($rolFiltro) . '&pagina=')
+                            : url('users?pagina=');
+                        ?>
+                        <a href="<?= $urlBase . ($paginaAct - 1) ?>"
+                            class="btn btn-sm btn-light border px-3 <?= $paginaAct <= 1 ? 'disabled' : '' ?>">
+                            <i class="bi bi-chevron-left"></i> Anterior
+                        </a>
+                        <a href="<?= $urlBase . ($paginaAct + 1) ?>"
+                            class="btn btn-sm btn-primary px-3 <?= $paginaAct >= $totalPags ? 'disabled' : '' ?>">
+                            Siguiente <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>
