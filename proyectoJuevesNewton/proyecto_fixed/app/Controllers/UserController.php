@@ -10,6 +10,7 @@ use app\Core\Database;
 class UserController extends Controller
 {
 
+//Para referenciar views>users/index.php
     public function index(): void
     {
         Session::checkRole(['admin', 'directivo', 'administrativo']);
@@ -34,6 +35,17 @@ class UserController extends Controller
             'total' => $total,
         ]);
     }
+
+    //Para referenciar views>users/create.php
+    public function create(): void
+{
+    Session::checkRole(['admin', 'directivo']);
+    $db    = Database::getInstancia();
+    $roles = $db->query("SELECT * FROM roles")->fetchAll();
+    $this->render('users/create', ['roles' => $roles]);
+}
+
+//Para referenciar la data de los formularios de create y edit, y procesar la creación y actualización de usuarios en la base de datos:
     public function store(): void
     {
         Session::checkRole(['admin', 'directivo']);
@@ -91,6 +103,7 @@ class UserController extends Controller
         }
     }
 
+    //Para referenciar views>users/edit.php
     public function edit(): void
     {
         Session::checkRole(['admin', 'directivo']);
@@ -132,7 +145,7 @@ class UserController extends Controller
             die("Error al actualizar el usuario.");
         }
     }
-
+//Para referenciar la eliminación de usuarios
     public function delete(): void
     {
         Session::checkRole(['admin', 'directivo']);
