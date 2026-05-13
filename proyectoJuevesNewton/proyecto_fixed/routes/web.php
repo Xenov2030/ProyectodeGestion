@@ -10,6 +10,7 @@ use app\Controllers\ProjectController;
 use app\Controllers\TicketController;
 use app\Controllers\ChatController;
 use app\Controllers\LanguageController;
+use app\Controllers\AuditLogController;
 
 // ─── Dashboard ────────────────────────────────────────────────
 $router->get('/',          [DashboardController::class, 'index']);
@@ -48,3 +49,7 @@ $router->get('tickets/ver',    [TicketController::class, 'show']);
 
 // ─── Chat ─────────────────────────────────────────────────────
 $router->get('chat', [ChatController::class, 'index']);
+
+// ─── Registro de Auditoría ────────────────────────────────────
+$router->get('auditlog',          [AuditLogController::class, 'index']);
+$router->get('auditlog/exportar', [AuditLogController::class, 'exportar']);

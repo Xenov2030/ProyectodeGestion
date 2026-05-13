@@ -12,6 +12,10 @@ $isProyectos = (strpos($route, 'proyectos') === 0);
 $isTickets   = (strpos($route, 'tickets') === 0);
 $isChat      = (strpos($route, 'chat') === 0);
 $isUsers     = (strpos($route, 'users') === 0);
+<<<<<<< Updated upstream
+=======
+$isAuditLog  = (strpos($route, 'auditlog') === 0);
+>>>>>>> Stashed changes
 ?>
 <!DOCTYPE html>
 <html lang="<?= I18n::getLang() ?>">
@@ -64,6 +68,12 @@ $isUsers     = (strpos($route, 'users') === 0);
             <a href="<?= url('tickets') ?>" class="nav-link <?= $isTickets ? 'active' : '' ?>"><i class="bi bi-shield-check"></i> <?= I18n::t('tickets') ?></a>
             <a href="<?= url('chat') ?>" class="nav-link <?= $isChat ? 'active' : '' ?>"><i class="bi bi-chat-left-dots"></i> <?= I18n::t('chat') ?></a>
             <a href="<?= url('users') ?>" class="nav-link <?= $isUsers ? 'active' : '' ?>"><i class="bi bi-person"></i> <?= I18n::t('users') ?></a>
+<<<<<<< Updated upstream
+=======
+            <?php if (in_array(Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
+            <a href="<?= url('auditlog') ?>" class="nav-link <?= $isAuditLog ? 'active' : '' ?>"><i class="bi bi-shield-lock"></i> <?= I18n::t('audit_menu') ?></a>
+            <?php endif; ?>
+>>>>>>> Stashed changes
         </div>
         <div class="position-absolute bottom-0 w-100 p-4 border-top border-secondary border-opacity-10">
             <a href="<?= url('logout') ?>" class="text-decoration-none text-danger small fw-bold"><i class="bi bi-box-arrow-left me-2"></i> <?= I18n::t('logout') ?></a>
