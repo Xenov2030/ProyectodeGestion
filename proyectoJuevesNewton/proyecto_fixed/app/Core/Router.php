@@ -33,16 +33,13 @@ class Router {
         $methodName = $route['action'][1];
         $middlewares = $route['middlewares'];
 
-        // Carga automática de controladores
-        $this->autoload($controllerClass);
-
+        // Carga automática ya no es necesaria aquí (se maneja en index.php)
+        
         // Ejecución de Middlewares
         foreach ($middlewares as $mwKey => $mwValue) {
             $mwName = is_string($mwKey) ? $mwKey : $mwValue;
             $rolesPermitidos = is_array($mwValue) ? $mwValue : [];
             $mwClass = "\\app\\Middlewares\\" . $mwName;
-
-            $this->autoload($mwClass);
 
             if (class_exists($mwClass)) {
                 $mwInstance = new $mwClass();
@@ -52,9 +49,6 @@ class Router {
                 die("Error 500: Middleware $mwClass no encontrado.");
             }
         }
-
-        // Parche preventivo: Carga manual de modelos necesarios antes de instanciar controladores
-        $this->loadModels();
 
         if (class_exists($controllerClass)) {
             $controller = new $controllerClass();
@@ -68,36 +62,6 @@ class Router {
         die("Error 500: No se pudo cargar el controlador $controllerClass.");
     }
 
-    /**
-     * Carga todos los modelos disponibles en la carpeta app/Models.
-     */
-    private function loadModels(): void {
-        $modelsDir = __DIR__ . '/../Models/';
-        if (is_dir($modelsDir)) {
-            foreach (glob($modelsDir . "*.php") as $filename) {
-                require_once $filename;
-            }
-        }
-    }
-
-    /**
-     * Sistema de autodescubrimiento de archivos basado en Namespace
-     */
-    private function autoload(string $fullClassName): void {
-        if (class_exists($fullClassName)) return;
-
-        $basePath = __DIR__ . '/../';
-        
-        // Limpiar el prefijo app\ si existe
-        $cleanName = str_replace('app\\', '', $fullClassName);
-        $relativepath = str_replace('\\', '/', $cleanName);
-        
-        $filePath = $basePath . $relativepath . '.php';
-
-        if (file_exists($filePath)) {
-            require_once $filePath;
-        }
-    }
 
     private function trimUri(string $uri): string {
         return trim($uri, '/') ?: '/';

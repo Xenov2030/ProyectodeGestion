@@ -15,11 +15,14 @@ class ChatMessage {
         $db = Database::getInstance()->getConnection();
         $stmt = $db->prepare("
             SELECT * FROM mensajes_chat 
-            WHERE (remitente_id = :u AND destinatario_id = :c) 
-               OR (remitente_id = :c AND destinatario_id = :u)
+            WHERE (remitente_id = :u1 AND destinatario_id = :c1) 
+               OR (remitente_id = :c2 AND destinatario_id = :u2)
             ORDER BY created_at ASC
         ");
-        $stmt->execute(['u' => $id1, 'c' => $id2]);
+        $stmt->execute([
+            'u1' => $id1, 'c1' => $id2,
+            'c2' => $id1, 'u2' => $id2
+        ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

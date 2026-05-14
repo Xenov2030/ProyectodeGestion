@@ -13,16 +13,23 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 // ── 2. Constante global de vistas ───────────────────────────
 define('VIEWS_PATH', __DIR__ . '/../views');
 
-// ── 3. Carga del framework ──────────────────────────────────
-require_once __DIR__ . '/../app/Config/Config.php';
-require_once __DIR__ . '/../app/Core/Session.php';
-require_once __DIR__ . '/../app/Core/Database.php';
-require_once __DIR__ . '/../app/Core/I18n.php';
-require_once __DIR__ . '/../app/Core/Controller.php';
-require_once __DIR__ . '/../app/Core/Router.php';
+// ── 3. Autoloader PSR-4 ───────────────────────────────────────
+spl_autoload_register(function ($class) {
+    $prefix = 'app\\';
+    $base_dir = __DIR__ . '/../app/';
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) return;
+    $relative_class = substr($class, $len);
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+    if (file_exists($file)) require $file;
+});
 
 // ── 4. Cargar variables de entorno desde .env ───────────────
 $envPath = __DIR__ . '/../.env';
+if (!file_exists($envPath) && file_exists($envPath . '.example')) {
+    copy($envPath . '.example', $envPath);
+}
+
 if (file_exists($envPath)) {
     $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
@@ -30,6 +37,7 @@ if (file_exists($envPath)) {
         if (strpos($line, '=') === false) continue;
         [$name, $value] = explode('=', $line, 2);
         putenv(trim($name) . '=' . trim($value));
+        $_ENV[trim($name)] = trim($value);
     }
 }
 
@@ -46,8 +54,7 @@ function redirect(string $path = ''): void {
 // ── 6. Iniciar sesion ───────────────────────────────────────
 \app\Core\Session::init();
 
-// ── 7. Instanciar el Router — UNA SOLA VEZ ──────────────────
-// (web.php solo registra rutas, NO crea nuevo Router ni despacha)
+// ── 7. Instanciar el Router ─────────────────────────────────
 $router = new \app\Core\Router();
 
 // ── 8. Registrar rutas ──────────────────────────────────────
@@ -55,17 +62,28 @@ require_once __DIR__ . '/../routes/web.php';
 
 // ── 9. Resolver la URI limpia ───────────────────────────────
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$scriptDir  = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-$baseDir    = dirname($scriptDir);
+$scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']); // e.g. /proyectos/proyecto_fixed/public/index.php
 
-if ($baseDir !== '/' && strpos($requestUri, $baseDir) === 0) {
-    $requestUri = substr($requestUri, strlen($baseDir));
+// 1. Obtener la ruta base del proyecto (quitando /public/index.php)
+$projectRoot = preg_replace('#/public/index\.php$#', '', $scriptName);
+
+// 2. Quitar la ruta del proyecto de la URI solicitada
+if ($projectRoot !== '/' && !empty($projectRoot)) {
+    if (strpos($requestUri, $projectRoot) === 0) {
+        $requestUri = substr($requestUri, strlen($projectRoot));
+    }
 }
 
+// 3. Quitar el prefijo /public si aún existe (acceso directo a public/...)
 $requestUri = preg_replace('#^/public#', '', $requestUri);
+
+// 4. Normalizar la URI
+$requestUri = '/' . trim($requestUri, '/');
 $requestUri = $requestUri ?: '/';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
+
 // ── 10. Despachar ───────────────────────────────────────────
 $router->dispatch($requestUri, $method);
+

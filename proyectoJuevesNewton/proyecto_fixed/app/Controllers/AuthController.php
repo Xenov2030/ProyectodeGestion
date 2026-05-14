@@ -5,6 +5,7 @@ namespace app\Controllers;
 use app\Core\Controller;
 use app\Core\Session;
 use app\Models\User;
+use app\Models\AuditLog;
 
 class AuthController extends Controller {
 
@@ -40,9 +41,12 @@ class AuthController extends Controller {
             $_SESSION['empresa_id'] = $user['empresa_id']; // ← clave para multi-tenant
             $_SESSION['last_regeneration'] = time();
 
+            AuditLog::registrar($user['id'], 'Login', 'Acceso', 'Inicio de sesión exitoso');
+
             redirect('dashboard');
 
         } else {
+            AuditLog::registrar(null, 'Login', 'Acceso', "Intento fallido con email: $email", 'fallido');
             $this->render('auth/login', [
                 'error' => 'Correo o clave incorrectos.'
             ], 'auth');
@@ -50,8 +54,42 @@ class AuthController extends Controller {
     }
 
     public function logout(): void {
+        AuditLog::registrar(Session::get('user_id'), 'Logout', 'Acceso', 'Cierre de sesión');
         Session::destroy();
         redirect('login');
+    }
+
+    public function createDemoUser() {
+        $db = \app\Core\Database::getInstancia();
+        $pass = password_hash('123456', PASSWORD_DEFAULT);
+        
+        $rol = $db->query("SELECT id FROM roles WHERE nombre = 'cliente' LIMIT 1")->fetch();
+        $rolId = $rol ? $rol['id'] : 5;
+
+        // Limpiar para evitar duplicados
+        $db->exec("DELETE FROM usuarios WHERE email = 'demo@cliente.com'");
+
+        $sql = "INSERT INTO usuarios (nombre, email, password, rol_id, empresa_id, estado) 
+                VALUES ('usuariodemo', 'demo@cliente.com', ?, ?, 1, 'activo')";
+        
+        $stmt = $db->prepare($sql);
+        try {
+            $success = $stmt->execute([$pass, $rolId]);
+            if ($success) {
+                echo "<div style='font-family:sans-serif; text-align:center; padding-top:50px;'>";
+                echo "<h2 style='color:#10b981;'>✓ Usuario Demo Preparado</h2>";
+                echo "<p>Usa estos datos exactos (con el arroba):</p>";
+                echo "<div style='background:#f3f4f6; padding:20px; display:inline-block; border-radius:10px; text-align:left;'>";
+                echo "<strong>Correo Electrónico:</strong> <code style='font-size:1.2rem;'>demo@cliente.com</code><br>";
+                echo "<strong>Contraseña:</strong> <code style='font-size:1.2rem;'>123456</code>";
+                echo "</div><br><br>";
+                echo "<a href='".url('login')."' style='padding:12px 25px; background:#4f46e5; color:white; text-decoration:none; border-radius:8px; font-weight:bold;'>IR AL LOGIN</a>";
+                echo "</div>";
+            }
+        } catch (\Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        exit;
     }
 
     public function forgotPassword(): void {

@@ -1,14 +1,15 @@
 <?php
-// views/tickets/create.php
+use app\Core\I18n;
+$isCliente = \app\Core\Session::get('rol_nombre') === 'cliente';
 ?>
 <div class="row justify-content-center">
     <div class="col-lg-7">
         <div class="card shadow border-0">
             <div class="card-header bg-success text-white py-3">
-                <h5 class="m-0 fw-bold">Abrir Nuevo Ticket de Soporte</h5>
+                <h5 class="m-0 fw-bold"><?= $isCliente ? I18n::t('request_support') : I18n::t('new_ticket') ?></h5>
             </div>
             <div class="card-body p-4">
-                <form action="/tickets/crear" method="POST">
+                <form action="<?= url('tickets/crear') ?>" method="POST">
                     <?= \app\Core\Controller::csrf_field() ?>
 
                     <div class="mb-3">
@@ -42,8 +43,8 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg fw-bold shadow-sm">Enviar Ticket</button>
-                        <a href="<?= url('tickets') ?>" class="btn btn-light">Cancelar</a>
+                        <button type="submit" class="btn btn-success btn-lg fw-bold shadow-sm"><?= $isCliente ? I18n::t('send_request_btn') : I18n::t('send') ?></button>
+                        <a href="<?= url('tickets') ?>" class="btn btn-light"><?= I18n::t('cancel') ?></a>
                     </div>
                 </form>
             </div>

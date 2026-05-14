@@ -12,17 +12,24 @@ class Project {
      * Si se pasa un $empresaId (int), filtra por esa empresa.
      * Si es null (Admin Global), obtiene todos los proyectos del sistema.
      */
-    public static function getAllByEmpresa(?int $empresaId = null): array {
+    public static function getAllByEmpresa(?int $empresaId, int $userId, string $rolNombre): array {
         $db = Database::getInstancia();
         
         $sql = "SELECT p.*, u.nombre AS cliente_nombre 
                 FROM proyectos p 
-                INNER JOIN usuarios u ON p.cliente_id = u.id";
+                INNER JOIN usuarios u ON p.cliente_id = u.id 
+                WHERE 1=1";
         
         $params = [];
         if ($empresaId !== null) {
-            $sql .= " WHERE p.empresa_id = :empresa_id";
+            $sql .= " AND p.empresa_id = :empresa_id";
             $params['empresa_id'] = $empresaId;
+        }
+
+        // RBAC: El cliente solo ve sus propios proyectos
+        if ($rolNombre === 'cliente') {
+            $sql .= " AND p.cliente_id = :user_id";
+            $params['user_id'] = $userId;
         }
         
         $sql .= " ORDER BY p.created_at DESC";

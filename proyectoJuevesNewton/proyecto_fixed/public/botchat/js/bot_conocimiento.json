@@ -1,0 +1,15 @@
+{
+     "respuestas": {
+         "ayuda": "¡Hola! Soy tu asistente virtual. Puedo ayudarte con: crear tickets, ver estados, horarios, usuarios y más. ¿Qué necesitas?",
+         "estado": "Para ver el estado de tus trámites, ve a 'Tickets / Trámites' en el menú lateral izquierdo.",
+         "usuarios": "Para gestionar usuarios, ve al módulo de 'Gestión de Usuarios' en el menú lateral izquierdo.",
+         "crear ticket": "Para crear un nuevo ticket, ve al módulo de 'Tickets / Trámites' y haz clic en 'Crear Nuevo Ticket'.",
+         "horarios": "Nuestro horario de atención es de lunes a viernes de 9am a 6pm."
+     },
+    "preguntas": [
+        {"clave": "horario", "respuesta": "Estamos de 9am a 6pm."},
+        {"clave": "ticket", "respuesta": "Para crear un ticket ve al módulo de Soporte."},
+        {"clave": "pago", "respuesta": "Aceptamos transferencias y tarjetas de crédito."}
+    ]
+}
+ 

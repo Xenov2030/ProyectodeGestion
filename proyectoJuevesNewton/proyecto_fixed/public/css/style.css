@@ -120,15 +120,15 @@ body {
     cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 28px;
 }
 #bot-panel { 
-    display: none; position: absolute; bottom: 85px; right: 0; width: 380px; height: 550px; 
-    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(24px); 
-    border-radius: 24px; border: 1px solid rgba(255,255,255,0.4);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); flex-direction: column; overflow: hidden;
+    display: none; position: absolute; bottom: 85px; right: 0; width: 340px; height: 520px; 
+    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); 
+    border-radius: 28px; border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); flex-direction: column; overflow: hidden;
 }
 .bot-header {
-    background: var(--primary);
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
     color: white;
-    padding: 15px 20px;
+    padding: 18px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -164,16 +164,290 @@ body {
 }
 .btn-option {
     background: white;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    border: 1px solid #edf2f7;
+    color: #4a5568;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .btn-option:hover {
+    background: #f8fafc;
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+/* ============================================================
+   AUDIT LOG / REGISTRO DE AUDITORÍA
+   ============================================================ */
+
+/* Tarjetas de estadísticas */
+.audit-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.audit-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.audit-stat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* Filtros */
+.audit-filter-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.6rem 1.2rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.audit-filter-input:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+.audit-filter-input input {
+    width: 100%;
+    font-size: 0.875rem;
+}
+.audit-filter-input input::placeholder {
+    color: var(--text-muted);
+}
+.audit-filter-select {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-main);
+    background: var(--surface);
+    transition: border-color 0.2s;
+}
+.audit-filter-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+
+/* Tabla */
+.audit-table-card {
+    border-radius: var(--radius);
+}
+.audit-table thead th {
+    background: #f8fafc;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0.75rem;
+    white-space: nowrap;
+}
+.audit-table tbody td {
+    padding: 1rem 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+.audit-row {
+    transition: background 0.15s;
+}
+.audit-row:hover {
+    background: #f8fafc;
+}
+
+/* Avatar circular con iniciales */
+.audit-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+}
+
+/* Badges de acción con colores diferenciados */
+.badge-accion-login {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+}
+.badge-accion-crear {
+    background: #d1fae5;
+    color: #059669;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+}
+.badge-accion-editar {
+    background: #fef3c7;
+    color: #b45309;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+}
+.badge-accion-eliminar {
+    background: #fee2e2;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+}
+.badge-accion-exportar {
+    background: #ede9fe;
+    color: #7c3aed;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+}
+.badge-accion-default {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+}
+
+/* IP con estilo de código */
+.audit-ip {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* Estados */
+.audit-estado-ok {
+    color: #059669;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.audit-estado-aviso {
+    color: #d97706;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.audit-estado-fallido {
+    color: #dc2626;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Paginación */
+.audit-pagination-bar {
+    background: #fafbfc;
+}
+.audit-page-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-main);
+    text-decoration: none;
+    transition: all 0.2s;
+    background: var(--surface);
+}
+.audit-page-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.audit-page-btn.active {
     background: var(--primary);
+    border-color: var(--primary);
     color: white;
 }
+
+/* Botón exportar */
+.audit-btn-export {
+    transition: all 0.2s;
+    font-size: 0.85rem;
+}
+.audit-btn-export:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Tarjetas clickeables */
+.audit-stat-clickable {
+    cursor: pointer;
+}
+.audit-stat-clickable:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.1);
+    border-color: var(--primary) !important;
+}
+
+/* Chevron de expansión en las filas */
+.audit-chevron {
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+    font-size: 0.7rem;
+}
+.audit-row-expanded .audit-chevron {
+    color: var(--primary);
+}
+
+/* Fila expandida con borde visual */
+.audit-row-expanded {
+    background: #fafbff !important;
+}
+
+/* Panel de detalle expandible (tema claro, coherente con el sistema) */
+.audit-detail-panel {
+    background: #f1f5f9;
+    color: var(--text-main);
+    padding: 1.25rem 2rem;
+    border-top: 2px solid var(--primary);
+    border-bottom: 1px solid var(--border);
+    animation: auditSlideDown 0.2s ease;
+}
+.audit-detail-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+}
+.audit-detail-value {
+    font-size: 0.85rem;
+    color: var(--text-main);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Animación de apertura */
+@keyframes auditSlideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+

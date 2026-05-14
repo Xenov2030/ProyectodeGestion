@@ -288,3 +288,42 @@ INSERT INTO `empresas` (`id`, `nombre_comercial`, `cuit`, `email`, `plan`, `esta
 INSERT INTO `usuarios` (`id`, `empresa_id`, `rol_id`, `nombre`, `email`, `password`, `estado`) VALUES
 (1, NULL, 1, 'Administrador Global', 'admin@gestorpro.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
 (2, 1,    2, 'Director Demo',        'director@demo.com',   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo');
+
+-- ============================================================
+-- TABLA 11: audit_log (Registro de Auditoría)
+-- ============================================================
+CREATE TABLE `audit_log` (
+  `id`          INT          NOT NULL AUTO_INCREMENT,
+  `usuario_id`  INT          DEFAULT NULL,
+  `accion`      VARCHAR(50)  NOT NULL COMMENT 'Login, Crear, Editar, Eliminar, Exportar',
+  `modulo`      VARCHAR(50)  NOT NULL COMMENT 'Acceso, Proyectos, Soporte, Usuarios, etc.',
+  `descripcion` TEXT         DEFAULT NULL,
+  `ip`          VARCHAR(45)  NOT NULL DEFAULT '0.0.0.0',
+  `estado`      ENUM('ok','aviso','fallido') NOT NULL DEFAULT 'ok',
+  `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_audit_usuario`  (`usuario_id`),
+  KEY `idx_audit_accion`   (`accion`),
+  KEY `idx_audit_modulo`   (`modulo`),
+  KEY `idx_audit_estado`   (`estado`),
+  KEY `idx_audit_fecha`    (`created_at`),
+  CONSTRAINT `fk_audit_usuario`
+    FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Datos de ejemplo para audit_log
+INSERT INTO `audit_log` (`usuario_id`, `accion`, `modulo`, `descripcion`, `ip`, `estado`, `created_at`) VALUES
+(1, 'Login',    'Acceso',     'Inicio de sesión exitoso',                    '192.168.1.10', 'ok',      NOW() - INTERVAL 30 MINUTE),
+(2, 'Crear',    'Proyectos',  'Creó el proyecto "Rediseño Web"',             '10.0.0.33',    'ok',      NOW() - INTERVAL 1 HOUR),
+(1, 'Editar',   'Usuarios',   'Editó el perfil del usuario ID 3',            '192.168.1.10', 'ok',      NOW() - INTERVAL 2 HOUR),
+(2, 'Eliminar', 'Proyectos',  'Eliminó el proyecto "Test Borrador"',         '10.0.0.45',    'aviso',   NOW() - INTERVAL 3 HOUR),
+(1, 'Login',    'Acceso',     'Intento de login fallido (contraseña incorrecta)', '172.16.0.22', 'fallido', NOW() - INTERVAL 4 HOUR),
+(2, 'Exportar', 'Reportes',   'Exportó reporte de tickets en PDF',           '10.0.0.77',    'ok',      NOW() - INTERVAL 5 HOUR),
+(1, 'Crear',    'Soporte',    'Creó ticket #45: Error en facturación',        '10.0.0.88',    'ok',      NOW() - INTERVAL 6 HOUR),
+(2, 'Editar',   'Mensajería', 'Editó mensaje en chat grupal',                '10.0.0.55',    'ok',      NOW() - INTERVAL 7 HOUR),
+(1, 'Eliminar', 'Usuarios',   'Eliminó usuario "usuario_test@demo.com"',     '192.168.1.10', 'ok',      NOW() - INTERVAL 8 HOUR),
+(2, 'Login',    'Acceso',     'Inicio de sesión exitoso',                    '10.0.0.33',    'ok',      NOW() - INTERVAL 9 HOUR),
+(1, 'Crear',    'Proyectos',  'Creó el proyecto "App Móvil v2"',             '192.168.1.10', 'ok',      NOW() - INTERVAL 10 HOUR),
+(2, 'Editar',   'Soporte',    'Cambió estado del ticket #12 a "cerrado"',    '10.0.0.45',    'ok',      NOW() - INTERVAL 11 HOUR);
