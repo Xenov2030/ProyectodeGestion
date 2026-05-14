@@ -1,6 +1,7 @@
 <?php
 // views/projects/index.php
 use app\Core\I18n;
+use app\Core\Session;
 $rol = Session::get('rol_nombre');
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
