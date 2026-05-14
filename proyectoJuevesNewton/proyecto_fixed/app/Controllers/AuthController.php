@@ -21,7 +21,7 @@ class AuthController extends Controller {
 
         if (empty($email) || empty($password)) {
             $this->render('auth/login', [
-                'error' => 'Por favor completa ambos campos.'
+                'error' => 'Por favor, completa ambos campos.'
             ], 'auth');
             return;
         }
@@ -44,7 +44,7 @@ class AuthController extends Controller {
 
         } else {
             $this->render('auth/login', [
-                'error' => 'Correo o contrasena incorrectos.'
+                'error' => 'Correo o clave incorrectos.'
             ], 'auth');
         }
     }
