@@ -33,7 +33,7 @@ class I18n {
             'ago' => 'hace',
             'yesterday' => 'ayer',
             'no_recent_activity' => 'No hay actividad reciente para mostrar',
-            'login_title' => 'Sistema de Gestión',
+            'login_title' => 'Gestor Pro',
             'login_subtitle' => 'Inicia sesión en tu cuenta para continuar',
             'email_address' => 'Correo Electrónico',
             'password' => 'Contraseña',
