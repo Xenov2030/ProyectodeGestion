@@ -1,13 +1,12 @@
-<?php // views/users/index.php ?>
-
+<?php use app\Core\I18n; ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold mb-1">Gestión de Usuarios</h2>
-        <p class="text-muted small mb-0">Gestiona usuarios, roles y acceso al sistema.</p>
+        <h2 class="fw-bold mb-1"><?= I18n::t('users_title') ?></h2>
+        <p class="text-muted small mb-0"><?= I18n::t('users_subtitle') ?></p>
     </div>
     <?php if (in_array(\app\Core\Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
         <a href="<?= url('users/create') ?>" class="btn btn-primary fw-semibold px-4 py-2 d-flex align-items-center gap-2">
-            <i class="bi bi-plus-lg"></i> Nuevo Usuario
+            <i class="bi bi-plus-lg"></i> <?= I18n::t('users_create') ?>
         </a>
     <?php endif; ?>
 </div>
@@ -19,14 +18,14 @@
     <ul class="nav nav-tabs border-bottom">
         <li class="nav-item">
             <a class="nav-link <?= !$rolFiltro ? 'active fw-bold' : 'text-muted' ?>" href="<?= url('users') ?>">
-                Todos
+                <?= I18n::t('all') ?>
             </a>
         </li>
         <?php foreach ($roles as $rol): ?>
             <li class="nav-item">
                 <a class="nav-link <?= $rolFiltro === $rol['nombre'] ? 'active fw-bold' : 'text-muted' ?>"
                     href="<?= url('users?rol=' . urlencode($rol['nombre'])) ?>">
-                    <?= htmlspecialchars(ucfirst($rol['nombre'])) ?>
+                    <?= htmlspecialchars(I18n::t('role_' . strtolower($rol['nombre']))) ?>
                 </a>
             </li>
         <?php endforeach; ?>
@@ -47,11 +46,11 @@
                 <table class="table table-hover align-middle mb-0" style="font-size: 0.875rem;">
                     <thead class="table-light border-bottom">
                         <tr class="text-uppercase text-muted" style="font-size: 0.72rem; letter-spacing: 0.08em;">
-                            <th class="px-4 py-3 fw-semibold border-0">USUARIO</th>
-                            <th class="px-4 py-3 fw-semibold border-0">EMAIL</th>
-                            <th class="px-4 py-3 fw-semibold border-0 text-center">ROL</th>
-                            <th class="px-4 py-3 fw-semibold border-0 text-center">ESTADO</th>
-                            <th class="px-4 py-3 fw-semibold border-0 text-center">ACCIONES</th>
+                            <th class="px-4 py-3 fw-semibold border-0"><?= I18n::t('users_col_name') ?></th>
+                            <th class="px-4 py-3 fw-semibold border-0"><?= I18n::t('users_col_email') ?></th>
+                            <th class="px-4 py-3 fw-semibold border-0 text-center"><?= I18n::t('users_col_role') ?></th>
+                            <th class="px-4 py-3 fw-semibold border-0 text-center"><?= I18n::t('users_col_status') ?></th>
+                            <th class="px-4 py-3 fw-semibold border-0 text-center"><?= I18n::t('users_col_actions') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,7 +79,7 @@
                                     <span
                                         class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary fw-semibold px-3 py-2"
                                         style="font-size: 0.7rem; letter-spacing: 0.05em;">
-                                        <?= htmlspecialchars(strtoupper($user['rol_nombre'])) ?>
+                                        <?= htmlspecialchars(strtoupper(I18n::t('role_' . strtolower($user['rol_nombre'])))) ?>
                                     </span>
                                 </td>
 
@@ -89,12 +88,12 @@
                                     <?php if ($user['estado'] === 'activo'): ?>
                                         <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-semibold px-3 py-2"
                                             style="font-size: 0.7rem;">
-                                            <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i> Activo
+                                            <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i> <?= I18n::t('users_active') ?>
                                         </span>
                                     <?php else: ?>
                                         <span class="badge rounded-pill bg-danger bg-opacity-10 text-danger fw-semibold px-3 py-2"
                                             style="font-size: 0.7rem;">
-                                            <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i> Inactivo
+                                            <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i> <?= I18n::t('users_inactive') ?>
                                         </span>
                                     <?php endif; ?>
                                 </td>
@@ -140,13 +139,11 @@
                             ? url('users?rol=' . urlencode($rolFiltro) . '&pagina=')
                             : url('users?pagina=');
                         ?>
-                        <a href="<?= $urlBase . ($paginaAct - 1) ?>"
-                            class="btn btn-sm btn-light border px-3 <?= $paginaAct <= 1 ? 'disabled' : '' ?>">
-                            <i class="bi bi-chevron-left"></i> Anterior
+                            <i class="bi bi-chevron-left"></i> <?= I18n::t('previous') ?>
                         </a>
                         <a href="<?= $urlBase . ($paginaAct + 1) ?>"
                             class="btn btn-sm btn-primary px-3 <?= $paginaAct >= $totalPags ? 'disabled' : '' ?>">
-                            Siguiente <i class="bi bi-chevron-right"></i>
+                            <?= I18n::t('next') ?> <i class="bi bi-chevron-right"></i>
                         </a>
                     </div>
                 </div>

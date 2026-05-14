@@ -71,7 +71,20 @@ function renderBotHistory() {
         const div = document.createElement('div');
         div.className = `p-3 rounded-4 shadow-sm ${isMe ? 'bg-primary text-white align-self-end' : 'bg-white text-dark align-self-start'}`;
         div.style.maxWidth = '75%';
-        div.innerHTML = `<div class="small">${m.text}</div><div class="text-end mt-1" style="font-size: 0.6rem; opacity: 0.6;">${new Date(m.time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
+        
+        let content = `<div class="small">${m.text}</div>`;
+        
+        // Render options if any
+        if (m.options && m.options.length > 0) {
+            content += `<div class="d-flex flex-wrap gap-2 mt-2 pt-2 border-top border-opacity-10">`;
+            m.options.forEach(opt => {
+                content += `<button onclick="window.handleUserInput('${opt.value || opt.label}'); setTimeout(renderBotHistory, 500);" class="btn btn-sm btn-outline-primary py-1 px-3 rounded-pill bg-white" style="font-size: 0.7rem;">${opt.label}</button>`;
+            });
+            content += `</div>`;
+        }
+        
+        content += `<div class="text-end mt-1" style="font-size: 0.6rem; opacity: 0.6;">${new Date(m.time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
+        div.innerHTML = content;
         container.appendChild(div);
     });
     container.scrollTop = container.scrollHeight;
@@ -105,10 +118,31 @@ function loadChat(id, name) {
 function fetchMessages() {
     if (!currentChatId || currentChatId === 'bot') return;
     fetch('<?= url("chat/getMessages") ?>?contacto_id=' + currentChatId)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                return res.json().catch(() => { throw new Error("HTTP " + res.status); });
+            }
+            return res.json();
+        })
         .then(data => {
             const container = document.getElementById('chat-messages-container');
             if (!container || currentChatId === 'bot') return;
+            
+            // Si hay un error devuelto por el servidor
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            if (!Array.isArray(data)) {
+                console.error("Data is not an array:", data);
+                return;
+            }
+
+            if (data.length === 0) {
+                container.innerHTML = `<div class="text-center py-5 text-muted opacity-50"><i class="bi bi-chat-dots fs-1 d-block mb-2"></i><div class="small"><?= I18n::t('no_messages') ?></div></div>`;
+                return;
+            }
+
             container.innerHTML = '';
             const myId = "<?= Session::get('user_id') ?>";
             data.forEach(m => {
@@ -120,6 +154,13 @@ function fetchMessages() {
                 container.appendChild(div);
             });
             container.scrollTop = container.scrollHeight;
+        })
+        .catch(err => {
+            console.error("Fetch error details:", err);
+            document.getElementById('chat-messages-container').innerHTML = 
+                '<div class="text-center py-5 text-danger small">' + 
+                '<?= I18n::t("error_loading_chat") ?>' + 
+                '<br><span style="font-size:0.6rem; opacity:0.7;">' + err.message + '</span></div>';
         });
 }
 

@@ -12,10 +12,6 @@ $isProyectos = (strpos($route, 'proyectos') === 0);
 $isTickets   = (strpos($route, 'tickets') === 0);
 $isChat      = (strpos($route, 'chat') === 0);
 $isUsers     = (strpos($route, 'users') === 0);
-<<<<<<< Updated upstream
-=======
-$isAuditLog  = (strpos($route, 'auditlog') === 0);
->>>>>>> Stashed changes
 ?>
 <!DOCTYPE html>
 <html lang="<?= I18n::getLang() ?>">
@@ -67,13 +63,12 @@ $isAuditLog  = (strpos($route, 'auditlog') === 0);
             <a href="<?= url('proyectos') ?>" class="nav-link <?= $isProyectos ? 'active' : '' ?>"><i class="bi bi-layers"></i> <?= I18n::t('projects') ?></a>
             <a href="<?= url('tickets') ?>" class="nav-link <?= $isTickets ? 'active' : '' ?>"><i class="bi bi-shield-check"></i> <?= I18n::t('tickets') ?></a>
             <a href="<?= url('chat') ?>" class="nav-link <?= $isChat ? 'active' : '' ?>"><i class="bi bi-chat-left-dots"></i> <?= I18n::t('chat') ?></a>
+            <?php if (Session::get('rol_nombre') !== 'cliente'): ?>
             <a href="<?= url('users') ?>" class="nav-link <?= $isUsers ? 'active' : '' ?>"><i class="bi bi-person"></i> <?= I18n::t('users') ?></a>
-<<<<<<< Updated upstream
-=======
-            <?php if (in_array(Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
-            <a href="<?= url('auditlog') ?>" class="nav-link <?= $isAuditLog ? 'active' : '' ?>"><i class="bi bi-shield-lock"></i> <?= I18n::t('audit_menu') ?></a>
             <?php endif; ?>
->>>>>>> Stashed changes
+            <?php if (Session::get('rol_nombre') === 'admin' || Session::get('rol_nombre') === 'directivo'): ?>
+            <a href="<?= url('auditoria') ?>" class="nav-link <?= strpos($route, 'auditoria') === 0 ? 'active' : '' ?>"><i class="bi bi-shield-lock"></i> <?= I18n::t('audit_menu') ?></a>
+            <?php endif; ?>
         </div>
         <div class="position-absolute bottom-0 w-100 p-4 border-top border-secondary border-opacity-10">
             <a href="<?= url('logout') ?>" class="text-decoration-none text-danger small fw-bold"><i class="bi bi-box-arrow-left me-2"></i> <?= I18n::t('logout') ?></a>
@@ -96,6 +91,29 @@ $isAuditLog  = (strpos($route, 'auditlog') === 0);
                         <li><a class="dropdown-item py-2 px-3 small d-flex justify-content-between" href="<?= url('lang?lang=en') ?>">English <span>🇺🇸</span></a></li>
                     </ul>
                 </div>
+                <!-- Notificaciones -->
+                <div class="dropdown">
+                    <div class="position-relative cursor-pointer" id="notification-bell" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell fs-5 text-muted"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.5rem; padding: 0.25rem 0.4rem; display:none;" id="notification-badge">0</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 p-0 overflow-hidden" style="width: 300px; border-radius: 12px;" id="notification-dropdown">
+                        <li class="bg-light p-3 border-bottom d-flex justify-content-between align-items-center">
+                            <span class="fw-bold small"><?= I18n::t('notifications') ?? 'Notificaciones' ?></span>
+                            <span class="badge bg-primary rounded-pill" id="notification-count-text">0</span>
+                        </li>
+                        <div id="notification-list" style="max-height: 350px; overflow-y: auto;">
+                            <!-- Aquí se cargarán las notificaciones dinámicamente -->
+                            <li class="p-4 text-center text-muted">
+                                <i class="bi bi-bell-slash fs-3 d-block mb-2 opacity-50"></i>
+                                <small><?= I18n::t('no_notifications') ?? 'No tienes notificaciones nuevas' ?></small>
+                            </li>
+                        </div>
+                        <li class="border-top">
+                            <a href="<?= url('chat') ?>" class="dropdown-item text-center py-2 small text-primary fw-bold">Ver todo</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold text-dark small"><?= Session::get('user_name') ?></div>
@@ -110,6 +128,7 @@ $isAuditLog  = (strpos($route, 'auditlog') === 0);
 
         <main class="p-4 p-md-5">
             <?= $content ?>
+                
         </main>
     </div>
 </div>
@@ -124,11 +143,12 @@ $isAuditLog  = (strpos($route, 'auditlog') === 0);
             <button class="btn btn-sm text-white p-0 border-0" onclick="toggleBot()"><i class="bi bi-x-lg"></i></button>
         </div>
         <div id="bot-content">
-            <div class="msg bot"><?= I18n::t('bot_welcome') ?></div>
+            <div class="msg bot"><?= I18n::getLang()==='en'?'Hello! How can I help you today?':'¡Hola! ¿En qué puedo ayudarte hoy?' ?></div>
             <div class="bot-options">
                 <button class="btn-option" onclick="handleUserInput('nav_crear_proyecto')">🚀 <?= I18n::getLang()==='en'?'New Project':'Nuevo Proyecto' ?></button>
-                <button class="btn-option" onclick="handleUserInput('nav_crear_ticket')">🎫 <?= I18n::getLang()==='en'?'New Ticket':'Nuevo Ticket' ?></button>
-                <button class="btn-option" onclick="handleUserInput('estado')">📍 <?= I18n::getLang()==='en'?'Status':'Estado' ?></button>
+                <button class="btn-option" onclick="handleUserInput('estado')">📍 <?= I18n::getLang()==='en'?'View Status':'Ver Estados' ?></button>
+                <button class="btn-option" onclick="handleUserInput('nav_crear_ticket')">💳 <?= I18n::getLang()==='en'?'Create Ticket':'Crear Ticket' ?></button>
+                <button class="btn-option" onclick="handleUserInput('horarios')">🕒 <?= I18n::getLang()==='en'?'Schedule':'Horarios' ?></button>
             </div>
         </div>
         <div class="bot-footer p-3 bg-white border-top">
@@ -141,10 +161,13 @@ $isAuditLog  = (strpos($route, 'auditlog') === 0);
     <button id="bot-btn" onclick="toggleBot()"><i class="bi bi-robot"></i></button>
 </div>
 
+<!-- Toast Container para Notificaciones -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const KNOWLEDGE_PATH = "<?= url('botchat/js/bot_conocimiento.json') ?>";
-    const BASE_URL = "<?= url('') ?>";
+    const KNOWLEDGE_PATH = "<?= url('public/botchat/js/bot_conocimiento.json') ?>";
+    const BASE_URL = "<?= url('') ?>".replace(/\/$/, '');
     
     function toggleBot() { 
         const p = document.getElementById('bot-panel');
@@ -152,7 +175,6 @@ $isAuditLog  = (strpos($route, 'auditlog') === 0);
         if (p.style.display === 'flex') document.getElementById('bot-input').focus();
     }
 
-    // Funciones globales del bot integradas para máxima fiabilidad
     window.handleUserInput = function(text) {
         if (!text || text.trim() === "") return;
         if (typeof botProcess === 'function') {
@@ -161,7 +183,72 @@ $isAuditLog  = (strpos($route, 'auditlog') === 0);
             console.warn("Bot logic not loaded yet.");
         }
     }
+
+    // Lógica de Notificaciones
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.getElementById('notification-badge');
+        const countText = document.getElementById('notification-count-text');
+        const list = document.getElementById('notification-list');
+        
+        // Cargar notificaciones desde localStorage o usar las iniciales si no existen
+        const storageKey = 'user_notifications_<?= Session::get('user_id') ?>';
+        let notifications = JSON.parse(localStorage.getItem(storageKey));
+
+        if (!notifications) {
+            notifications = [
+                { id: 1, text: 'Bienvenido al sistema de gestión', time: 'Justo ahora', icon: 'bi-info-circle', color: 'text-primary', link: '<?= url('dashboard') ?>' },
+                { id: 2, text: 'Tienes un nuevo mensaje de soporte', time: 'Hace 2m', icon: 'bi-chat-dots', color: 'text-success', link: '<?= url('chat') ?>' }
+            ];
+            localStorage.setItem(storageKey, JSON.stringify(notifications));
+        }
+
+        function renderNotifications() {
+            if (notifications.length > 0) {
+                badge.style.display = 'block';
+                badge.innerText = notifications.length;
+                countText.innerText = notifications.length;
+                
+                list.innerHTML = '';
+                notifications.forEach(n => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <a class="dropdown-item p-3 border-bottom d-flex align-items-center gap-3" href="${n.link}" data-id="${n.id}">
+                            <div class="rounded-circle bg-light p-2 d-flex align-items-center justify-content-center" style="width:35px; height:35px;">
+                                <i class="bi ${n.icon} ${n.color}"></i>
+                            </div>
+                            <div style="flex:1;">
+                                <div class="small fw-bold text-wrap" style="max-width: 200px; line-height:1.2;">${n.text}</div>
+                                <div class="text-muted" style="font-size: 0.65rem;">${n.time}</div>
+                            </div>
+                        </a>
+                    `;
+                    
+                    li.querySelector('a').addEventListener('click', function(e) {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        notifications = notifications.filter(notif => notif.id !== id);
+                        localStorage.setItem(storageKey, JSON.stringify(notifications));
+                        renderNotifications();
+                    });
+                    
+                    list.appendChild(li);
+                });
+            } else {
+                badge.style.display = 'none';
+                countText.innerText = '0';
+                list.innerHTML = `
+                    <li class="p-4 text-center text-muted">
+                        <i class="bi bi-bell-slash fs-3 d-block mb-2 opacity-50"></i>
+                        <small><?= I18n::t('no_notifications') ?></small>
+                    </li>
+                `;
+            }
+        }
+
+        renderNotifications();
+    });
 </script>
-<script src="<?= url('botchat/js/bot.js?v=' . time()) ?>"></script>
+<script src="<?= url('public/botchat/js/bot.js') ?>"></script>
+
+
 </body>
 </html>

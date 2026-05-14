@@ -5,15 +5,16 @@ namespace app\Controllers;
 use app\Core\Controller;
 use app\Core\Session;
 use app\Models\Project;
+use app\Models\AuditLog;
 
 class ProjectController extends Controller {
 
     public function index() {
-        // Obtenemos el empresa_id. Puede ser null para Administrador Global.
         $empresaId = Session::get('empresa_id');
+        $userId    = Session::get('user_id');
+        $rolNombre = Session::get('rol_nombre');
         
-        // El modelo ahora acepta null y devuelve todos los registros.
-        $proyectos = Project::getAllByEmpresa($empresaId);
+        $proyectos = Project::getAllByEmpresa($empresaId, (int)$userId, $rolNombre);
 
         $this->render('projects/index', [
             'proyectos' => $proyectos
@@ -28,22 +29,22 @@ class ProjectController extends Controller {
         $this->validateCsrf();
 
         $empresaId = Session::get('empresa_id');
+        $rolNombre = Session::get('rol_nombre');
+        $userId    = Session::get('user_id');
         
-        // Si es Admin Global y no especificó empresa_id, tomamos 1 por defecto (o manejarlo)
-        // Pero el Administrador Global usualmente gestiona todo el SaaS.
         $data = [
-            'empresa_id'   => $empresaId ? (int)$empresaId : 1, // Fallback a empresa ID 1 para admin global si crea
-            'cliente_id'   => (int)($_POST['cliente_id'] ?? 0),
+            'empresa_id'   => $empresaId ? (int)$empresaId : 1,
+            'cliente_id'   => $rolNombre === 'cliente' ? (int)$userId : (int)($_POST['cliente_id'] ?? 0),
             'nombre'       => htmlspecialchars(trim($_POST['nombre'] ?? '')),
             'descripcion'  => htmlspecialchars(trim($_POST['descripcion'] ?? '')),
-            'estado'       => $_POST['estado'] ?? 'pendiente',
+            'estado'       => 'pendiente', // Por defecto cuando solicita el cliente
             'prioridad'    => $_POST['prioridad'] ?? 'media',
-            'fecha_inicio' => $_POST['fecha_inicio'] ?? null,
+            'fecha_inicio' => $_POST['fecha_inicio'] ?? date('Y-m-d'),
             'fecha_fin'    => $_POST['fecha_fin'] ?? null
         ];
 
-        if (empty($data['nombre']) || empty($data['cliente_id'])) {
-            Session::set('flash_error', 'El nombre y el cliente son campos obligatorios.');
+        if (empty($data['nombre'])) {
+            Session::set('flash_error', 'El nombre es un campo obligatorio.');
             redirect('proyectos/crear');
             exit;
         }
@@ -51,6 +52,7 @@ class ProjectController extends Controller {
         $projectId = Project::create($data);
 
         if ($projectId) {
+            AuditLog::registrar(Session::get('user_id'), 'Crear', 'Proyectos', "Creó el proyecto: {$data['nombre']}");
             Session::set('flash_success', 'Proyecto creado exitosamente.');
             redirect('proyectos');
         } else {

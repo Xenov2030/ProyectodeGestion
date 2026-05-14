@@ -6,6 +6,7 @@ use app\Core\Controller;
 use app\Core\Session;
 use app\Models\Ticket;
 use app\Models\Project;
+use app\Models\AuditLog;
 
 class TicketController extends Controller {
 
@@ -24,7 +25,9 @@ class TicketController extends Controller {
 
     public function create() {
         $empresaId = Session::get('empresa_id');
-        $proyectos = Project::getAllByEmpresa($empresaId);
+        $userId    = Session::get('user_id');
+        $rolNombre = Session::get('rol_nombre');
+        $proyectos = Project::getAllByEmpresa($empresaId, (int)$userId, $rolNombre);
 
         $this->render('tickets/create', [
             'proyectos' => $proyectos
@@ -55,6 +58,7 @@ class TicketController extends Controller {
         $ticketId = Ticket::create($data);
 
         if ($ticketId) {
+            AuditLog::registrar(Session::get('user_id'), 'Crear', 'Soporte', "Abrió ticket: {$data['titulo']}");
             Session::set('flash_success', 'Ticket de soporte abierto correctamente.');
             redirect('tickets');
         } else {

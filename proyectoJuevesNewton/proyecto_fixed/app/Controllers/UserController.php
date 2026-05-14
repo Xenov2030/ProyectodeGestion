@@ -6,6 +6,7 @@ use app\Core\Controller;
 use app\Core\Session;
 use app\Models\User;
 use app\Core\Database;
+use app\Models\AuditLog;
 
 class UserController extends Controller
 {
@@ -94,6 +95,7 @@ class UserController extends Controller
         }
 
         if (User::create($data)) {
+            AuditLog::registrar(Session::get('user_id'), 'Crear', 'Usuarios', "Creó al usuario: {$data['nombre']} ({$data['email']})");
             redirect('users');
         } else {
             $this->render('users/create', [
@@ -140,6 +142,7 @@ class UserController extends Controller
         }
 
         if (User::update($id, $data)) {
+            AuditLog::registrar(Session::get('user_id'), 'Editar', 'Usuarios', "Editó al usuario ID: $id - {$data['nombre']}");
             redirect('users');
         } else {
             die("Error al actualizar el usuario.");
@@ -150,7 +153,13 @@ class UserController extends Controller
     {
         Session::checkRole(['admin', 'directivo']);
         $id = (int) ($_POST['id'] ?? 0);
-        User::delete($id);
+        
+        $usuario = User::findById($id);
+        if ($usuario) {
+            User::delete($id);
+            AuditLog::registrar(Session::get('user_id'), 'Eliminar', 'Usuarios', "Eliminó al usuario: {$usuario['nombre']} (ID: $id)");
+        }
+        
         redirect('users');
     }
 }

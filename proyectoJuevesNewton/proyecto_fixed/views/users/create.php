@@ -1,13 +1,12 @@
-<?php // views/users/create.php ?>
-
+<?php use app\Core\I18n; ?>
 <div class="d-flex align-items-center gap-4 mb-4">
     <a href="<?= url('users') ?>"
        class="btn btn-sm btn-light border d-flex align-items-center gap-1">
-        <i class="bi bi-arrow-left"></i> Volver
+        <i class="bi bi-arrow-left"></i> <?= I18n::t('cancel') ?>
     </a>
     <div>
-        <h2 class="fw-bold mb-0">Nuevo Usuario</h2>
-        <p class="text-muted small mb-0">Complete la información para crear un nuevo usuario.</p>
+        <h2 class="fw-bold mb-0"><?= I18n::t('users_create') ?></h2>
+        <p class="text-muted small mb-0"><?= I18n::t('users_subtitle') ?></p>
     </div>
 </div>
 
@@ -33,7 +32,7 @@
                     </h6>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Nombre completo <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold small"><?= I18n::t('users_form_name') ?> <span class="text-danger">*</span></label>
                         <input type="text" name="nombre" class="form-control rounded-3"
                                placeholder="ej. María Pérez" required
                                value="<?= htmlspecialchars($_POST['nombre'] ?? '') ?>">
@@ -56,7 +55,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Contraseña <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold small"><?= I18n::t('password') ?> <span class="text-danger">*</span></label>
                         <input type="password" name="password" class="form-control rounded-3"
                                placeholder="Mínimo 8 caracteres" required>
                     </div>
@@ -93,10 +92,10 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-semibold small">Estado inicial</label>
+                        <label class="form-label fw-semibold small"><?= I18n::t('audit_col_status') ?></label>
                         <select name="estado" class="form-select rounded-3">
-                            <option value="activo"   <?= ($_POST['estado'] ?? 'activo') === 'activo'   ? 'selected' : '' ?>>Activo</option>
-                            <option value="inactivo" <?= ($_POST['estado'] ?? '')        === 'inactivo' ? 'selected' : '' ?>>Inactivo</option>
+                            <option value="activo"   <?= ($_POST['estado'] ?? 'activo') === 'activo'   ? 'selected' : '' ?>><?= I18n::t('users_active') ?></option>
+                            <option value="inactivo" <?= ($_POST['estado'] ?? '')        === 'inactivo' ? 'selected' : '' ?>><?= I18n::t('users_inactive') ?></option>
                         </select>
                     </div>
 
@@ -113,10 +112,10 @@
     <!-- Botones -->
     <div class="d-flex justify-content-end align-items-center gap-3 mt-4">
         <a href="<?= url('users') ?>" class="btn btn-light border px-4">
-            Cancelar
+            <?= I18n::t('cancel') ?>
         </a>
         <button type="submit" class="btn btn-primary fw-semibold px-5">
-            <i class="bi bi-person-plus me-2"></i> Crear Usuario
+            <i class="bi bi-person-plus me-2"></i> <?= I18n::t('users_create_btn') ?>
         </button>
     </div>
 </form>

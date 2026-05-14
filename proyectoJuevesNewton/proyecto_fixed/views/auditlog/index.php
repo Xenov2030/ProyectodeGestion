@@ -1,5 +1,5 @@
 <?php
-// views/auditlog/index.php
+// views/auditoria/index.php
 // Vista del Registro de Auditoría.
 // Muestra tarjetas de resumen, filtros y la tabla de eventos.
 use app\Core\Session;
@@ -47,7 +47,7 @@ $avatarColores = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec489
         </h2>
         <p class="text-muted mb-0 small"><?= I18n::t('audit_subtitle') ?></p>
     </div>
-    <a href="<?= url('auditlog/exportar') ?>" class="btn btn-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-bold text-decoration-none audit-btn-export">
+    <a href="<?= url('auditoria/exportar') ?>" class="btn btn-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-bold text-decoration-none audit-btn-export">
         <i class="bi bi-download"></i>
         <?= I18n::t('audit_export') ?>
     </a>
@@ -56,7 +56,7 @@ $avatarColores = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec489
 <!-- Tarjetas de Estadísticas (clickeables = filtran la tabla) -->
 <div class="row g-3 mb-4">
     <div class="col-6 col-lg-3">
-        <a href="<?= url('auditlog') ?>" class="text-decoration-none">
+        <a href="<?= url('auditoria') ?>" class="text-decoration-none">
             <div class="card border-0 p-3 h-100 audit-stat-card audit-stat-clickable">
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="audit-stat-dot" style="background: #10b981;"></span>
@@ -68,7 +68,7 @@ $avatarColores = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec489
         </a>
     </div>
     <div class="col-6 col-lg-3">
-        <a href="<?= url('auditlog?accion=Eliminar') ?>" class="text-decoration-none">
+        <a href="<?= url('auditoria?accion=Eliminar') ?>" class="text-decoration-none">
             <div class="card border-0 p-3 h-100 audit-stat-card audit-stat-clickable">
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="audit-stat-dot" style="background: #ef4444;"></span>
@@ -80,7 +80,7 @@ $avatarColores = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec489
         </a>
     </div>
     <div class="col-6 col-lg-3">
-        <a href="<?= url('auditlog?estado=fallido') ?>" class="text-decoration-none">
+        <a href="<?= url('auditoria?estado=fallido') ?>" class="text-decoration-none">
             <div class="card border-0 p-3 h-100 audit-stat-card audit-stat-clickable">
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="audit-stat-dot" style="background: #f59e0b;"></span>
@@ -92,7 +92,7 @@ $avatarColores = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec489
         </a>
     </div>
     <div class="col-6 col-lg-3">
-        <a href="<?= url('auditlog?accion=Login&estado=ok') ?>" class="text-decoration-none">
+        <a href="<?= url('auditoria?accion=Login&estado=ok') ?>" class="text-decoration-none">
             <div class="card border-0 p-3 h-100 audit-stat-card audit-stat-clickable">
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="audit-stat-dot" style="background: #6366f1;"></span>
@@ -106,7 +106,7 @@ $avatarColores = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec489
 </div>
 
 <!-- Filtros -->
-<form method="GET" action="<?= url('auditlog') ?>" id="audit-filters-form">
+<form method="GET" action="<?= url('auditoria') ?>" id="audit-filters-form">
     <div class="row g-3 mb-4">
         <!-- Búsqueda -->
         <div class="col-12">
@@ -275,7 +275,7 @@ $avatarColores = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec489
                 $queryParams['pagina'] = $p;
                 $queryStr = http_build_query(array_filter($queryParams));
                 ?>
-                <a href="<?= url('auditlog?' . $queryStr) ?>"
+                <a href="<?= url('auditoria?' . $queryStr) ?>"
                    class="audit-page-btn <?= $p === $pagina ? 'active' : '' ?>">
                     <?= $p ?>
                 </a>

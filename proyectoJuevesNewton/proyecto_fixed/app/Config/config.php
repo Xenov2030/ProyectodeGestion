@@ -39,21 +39,27 @@ class Config {
         $envUrl = self::get('APP_URL', '');
 
         if (!empty($envUrl)) {
-            // Usar la URL del .env si está configurada
             $baseUrl = rtrim($envUrl, '/');
         } else {
-            // Auto-detección: funciona con cualquier ruta en WAMP/XAMPP
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
             $host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
-
-            // SCRIPT_NAME sería algo como /proyectos/proyectoJuevesNewton/public/index.php
+            
+            // SCRIPT_NAME: /proyectos/proyecto_fixed/public/index.php
             $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
-            // Quitamos /public/index.php (o /public) para obtener la raíz del proyecto
-            $basePath = preg_replace('#/public(/index\.php)?$#', '', $scriptName);
+            
+            // Detectar la raíz del proyecto (quitando /public/index.php)
+            $baseUrlPath = preg_replace('#/public/index\.php$#', '', $scriptName);
+            
+            // Si el servidor ya apunta a public/, dirname($scriptName) sería /
+            if ($baseUrlPath === $scriptName) {
+                $baseUrlPath = dirname($scriptName);
+            }
 
-            $baseUrl = $protocol . '://' . $host . $basePath;
+            $baseUrl = $protocol . '://' . $host . rtrim($baseUrlPath, '/');
         }
 
-        return $baseUrl . '/' . ltrim($path, '/');
+        return rtrim($baseUrl, '/') . '/' . ltrim($path, '/');
     }
+
+
 }

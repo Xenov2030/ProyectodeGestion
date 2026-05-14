@@ -29,21 +29,21 @@ class Session {
 
     public static function checkRole($allowedRoles) {
         if (!self::isLoggedIn()) {
-            header('Location: /login');
+            header('Location: ' . url('login'));
             exit();
         }
 
         $userRole = self::get('rol_nombre');
         if (!in_array($userRole, (array)$allowedRoles)) {
             // Redirect to dashboard with error or unauthorized page
-            header('Location: /dashboard?error=unauthorized');
+            header('Location: ' . url('dashboard?error=unauthorized'));
             exit();
         }
     }
 
     public static function redirectByRole() {
-        $role = self::get('rol_nombre');
-        header('Location: /dashboard');
+        header('Location: ' . url('dashboard'));
         exit();
     }
+
 }
