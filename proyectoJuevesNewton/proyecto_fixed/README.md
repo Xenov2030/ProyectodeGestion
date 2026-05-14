@@ -1,4 +1,4 @@
-# 🚀 GESTOR PRO — SaaS ERP/CRM
+# 🚀 Sistema de gestión — SaaS ERP/CRM
 
 Sistema de gestión integral para empresas: proyectos, tickets de soporte y mensajería interna. Desarrollado como proyecto final para el curso de Programación 2026.
 
