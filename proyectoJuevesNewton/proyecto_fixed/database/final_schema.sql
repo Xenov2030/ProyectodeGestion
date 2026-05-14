@@ -1,5 +1,5 @@
 -- ============================================================
--- GESTOR PRO - Schema SQL v2.0 (Producción)
+-- Sistema de gestión - Schema SQL v2.0 (Producción)
 -- ============================================================
 -- INSTRUCCIONES DE IMPORTACIÓN:
 --   1. Abre phpMyAdmin en http://localhost/phpmyadmin

@@ -18,7 +18,7 @@ $isUsers     = (strpos($route, 'users') === 0);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor Pro | <?= I18n::t('dashboard') ?></title>
+    <title>Sistema de gestión | <?= I18n::t('dashboard') ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -54,7 +54,7 @@ $isUsers     = (strpos($route, 'users') === 0);
         <div class="sidebar-header">
             <div class="d-flex align-items-center gap-2 mb-1">
                 <div class="bg-primary rounded-3 p-1"><i class="bi bi-grid-fill text-white fs-4"></i></div>
-                <h4 class="m-0 fw-bold tracking-tight">GESTOR PRO</h4>
+                <h4 class="m-0 fw-bold tracking-tight">GESTIÓN DE USUARIOS</h4>
             </div>
             <span class="text-secondary opacity-50 small fw-medium"><?= I18n::t('system_active') ?></span>
         </div>

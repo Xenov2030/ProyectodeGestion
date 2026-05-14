@@ -1,4 +1,4 @@
-# 🛠️ Guía de Instalación — Gestor Pro SaaS
+# 🛠️ Guía de Instalación — Sistema de gestión SaaS
 
 Sigue estos pasos para tener el proyecto funcionando en tu PC con WAMP.
 

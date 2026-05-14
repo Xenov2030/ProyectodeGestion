@@ -23,7 +23,7 @@ class TicketController {
         ob_start();
         include __DIR__ . '/../views/tickets_view.php';
         $content = ob_get_clean();
-        $title = 'Tickets - Gestor Profesional';
+        $title = 'Tickets - Sistema de gestión';
         include __DIR__ . '/../views/layout.php';
     }
 
@@ -81,7 +81,7 @@ class TicketController {
         ob_start();
         include __DIR__ . '/../views/profesional_tramites.php';
         $content = ob_get_clean();
-        $title = 'Trámites Profesionales - Gestor Profesional';
+        $title = 'Trámites Profesionales - Sistema de gestión';
         include __DIR__ . '/../views/layout.php';
     }
 
@@ -107,7 +107,7 @@ class TicketController {
         ob_start();
         include __DIR__ . '/../views/profesional_ticket_editar.php';
         $content = ob_get_clean();
-        $title = 'Actualizar Trámite - Gestor Profesional';
+        $title = 'Actualizar Trámite - Sistema de gestión';
         include __DIR__ . '/../views/layout.php';
     }
 
