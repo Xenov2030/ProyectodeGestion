@@ -63,7 +63,7 @@ $isUsers     = (strpos($route, 'users') === 0);
             <a href="<?= url('proyectos') ?>" class="nav-link <?= $isProyectos ? 'active' : '' ?>"><i class="bi bi-layers"></i> <?= I18n::t('projects') ?></a>
             <a href="<?= url('tickets') ?>" class="nav-link <?= $isTickets ? 'active' : '' ?>"><i class="bi bi-shield-check"></i> <?= I18n::t('tickets') ?></a>
             <a href="<?= url('chat') ?>" class="nav-link <?= $isChat ? 'active' : '' ?>"><i class="bi bi-chat-left-dots"></i> <?= I18n::t('chat') ?></a>
-            <?php if (Session::get('rol_nombre') !== 'cliente'): ?>
+            <?php if (in_array(Session::get('rol_nombre'), ['admin', 'directivo'])): ?>
             <a href="<?= url('users') ?>" class="nav-link <?= $isUsers ? 'active' : '' ?>"><i class="bi bi-person"></i> <?= I18n::t('users') ?></a>
             <?php endif; ?>
             <?php if (Session::get('rol_nombre') === 'admin' || Session::get('rol_nombre') === 'directivo'): ?>
