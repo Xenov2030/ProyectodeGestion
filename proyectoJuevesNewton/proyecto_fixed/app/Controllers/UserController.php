@@ -14,7 +14,7 @@ class UserController extends Controller
 //Para referenciar views>users/index.php
     public function index(): void
     {
-        Session::checkRole(['admin', 'directivo', 'administrativo']);
+        Session::checkRole(['admin', 'directivo']);
 
         $rolFiltro = $_GET['rol'] ?? null;
         $paginaAct = max(1, (int) ($_GET['pagina'] ?? 1));
