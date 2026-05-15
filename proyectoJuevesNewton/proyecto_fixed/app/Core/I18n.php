@@ -84,7 +84,7 @@ class I18n {
             'audit_detail_description'=> 'Detalle del evento',
             'audit_no_detail'         => 'Sin descripción adicional',
             // Gestión de Usuarios
-            'users_title'             => 'Gestión de Usuarios',
+            'users_title'             => 'Sistema de gestión',
             'users_subtitle'          => 'Listado completo y gestión de permisos',
             'users_create'            => 'Crear Usuario',
             'users_col_name'          => 'NOMBRE',
