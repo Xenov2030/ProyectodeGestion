@@ -20,7 +20,27 @@ $isCliente = \app\Core\Session::get('rol_nombre') === 'cliente';
                         <?php if (!$isCliente): ?>
                         <div class="col-md-4">
                             <label class="form-label small fw-bold">Cliente ID</label>
-                            <input type="number" name="cliente_id" class="form-control" placeholder="ID Cliente" required>
+                            <select name="cliente_id" class="form-select">
+                                <?php
+                                // cantidad de proyectos en BD (por empresa si aplica)
+                                $empresaId = \app\Core\Session::get('empresa_id');
+                                $db = \app\Core\Database::getInstancia();
+                                $sql = "SELECT COUNT(*) as total FROM proyectos";
+                                $params = [];
+                                if (!empty($empresaId)) {
+                                    $sql .= " WHERE empresa_id = :empresa_id";
+                                    $params['empresa_id'] = (int)$empresaId;
+                                }
+                                $stmt = $db->prepare($sql);
+                                $stmt->execute($params);
+                                $totalProyectos = (int)$stmt->fetchColumn();
+                                // se usa para poblar opciones dinámicamente, ejemplo: 1..N (si N>=1)
+                                $max = max(1, $totalProyectos);
+                                for ($i = 1; $i <= $max; $i++):
+                                ?>
+                                    <option value="<?= $i ?>"><?= $i ?></option>
+                                <?php endfor; ?>
+                            </select>
                         </div>
                         <?php endif; ?>
 
