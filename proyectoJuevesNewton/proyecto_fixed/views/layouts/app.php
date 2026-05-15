@@ -54,7 +54,7 @@ $isUsers     = (strpos($route, 'users') === 0);
         <div class="sidebar-header">
             <div class="d-flex align-items-center gap-2 mb-1">
                 <div class="bg-primary rounded-3 p-1"><i class="bi bi-grid-fill text-white fs-4"></i></div>
-                <h4 class="m-0 fw-bold tracking-tight">GESTOR DE USUARIOS</h4>
+                <h4 class="m-0 fw-bold tracking-tight">SISTEMA DE GESTIÓN</h4>
             </div>
             <span class="text-secondary opacity-50 small fw-medium"><?= I18n::t('system_active') ?></span>
         </div>
