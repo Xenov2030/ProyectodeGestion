@@ -103,6 +103,10 @@ class I18n {
             'users_form_role'         => 'Seleccionar Rol',
             'users_save'              => 'Guardar Cambios',
             'users_create_btn'        => 'Registrar Usuario',
+            'telephone'               => 'teléfono',
+            'repeat_password'         => 'Confirmar contraseña',
+            'roles'                   => 'Rol',
+            'personal_information'    => 'Datos personales',
             // Roles
             'role_admin'              => 'Administrador',
             'role_directivo'          => 'Directivo',
